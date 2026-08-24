@@ -63,7 +63,7 @@
         </a>
 
         <!-- Tombol Pendaftaran -->
-        <a href="{{ route('register') }}" class="btn btn-secondary" title="Daftar sebagai Petugas Baru">
+        <a href="#" class="btn btn-secondary" title="Daftar sebagai Petugas Baru">
           <span>Buat Akun Petugas</span>
         </a>
 

@@ -132,7 +132,7 @@
           </form>
 
           <div class="extra-links" id="signupLinkContainer">
-            <p>Belum sempat mendaftarkan diri? <a href="{{ route('register') }}">Daftar Akun Baru</a></p>
+            <p>Belum sempat mendaftarkan diri? <a href="#">Daftar Akun Baru</a></p>
           </div>
         </div>
 
