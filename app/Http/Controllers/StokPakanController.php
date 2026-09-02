@@ -19,6 +19,6 @@ class StokPakanController extends Controller
      */
     public function index()
     {
-        return view('stok-pakan');
+        return view('stokpakan');
     }
 }

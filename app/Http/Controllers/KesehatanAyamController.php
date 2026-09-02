@@ -19,6 +19,6 @@ class KesehatanAyamController extends Controller
      */
     public function index()
     {
-        return view('kesehatan-ayam');
+        return view('kesehatanayam');
     }
 }

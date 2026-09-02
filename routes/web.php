@@ -23,9 +23,9 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.perform');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // =========================================================
-// 2. ROUTE PROTEKSI (Wajib Login) - Disatukan dalam 1 Group
+// 2. ROUTE PROTEKSI (Wajib Login Dinonaktifkan Sementara) - Disatukan dalam 1 Group
 // =========================================================
-Route::middleware(['auth'])->group(function () {
+Route::middleware([])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     // Rute Petugas

@@ -19,6 +19,6 @@ class PrediksiHasilController extends Controller
      */
     public function index()
     {
-        return view('prediksi-hasil');
+        return view('prediksihasil');
     }
 }

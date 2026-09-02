@@ -1,10 +1,15 @@
+<!-- =========================================================
+     SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
+     File: resources/views/data-ayam.blade.php
+     Deskripsi: Halaman Manajemen Data Ayam - LIBAS
+========================================================= -->
 @extends('layouts.layout')
 
 @section('title', 'Manajemen Data Ayam - LIBAS')
 
 @section('content')
   <!-- Page Specific CSS -->
-  <link rel="stylesheet" href="{{ asset('css/dataAyamTAalip.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/data-ayam/data-ayam.css') }}" />
 
 <!-- ===== HEADER MOBILE / HAMBURGER MENU ===== -->
     <header class="mobile-header">
@@ -167,6 +172,6 @@
 @endsection
 
 @push('scripts')
-  <script src="{{ asset('js/dataAyamTAalip.js') }}"></script>
-  <script src="firebase.component/auth-state.js"></script>
+  <script type="module" src="{{ asset('js/data-ayam/data-ayam.js') }}"></script>
+  <!-- <script src="firebase.component/auth-state.js"></script> -->
 @endpush
