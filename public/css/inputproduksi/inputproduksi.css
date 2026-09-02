@@ -1,0 +1,1059 @@
+/* =========================================================
+   SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
+   File        : inputproduksi.css
+   Deskripsi   : Gaya visual halaman Input Produksi Harian
+                 (data telur, pakan, dan mortalitas per hari).
+   Mencakup    : header oranye, tombol, kartu statistik,
+                 area aksi filter, tabel data, badge status,
+                 modal form, scrollbar, dan responsif mobile.
+========================================================= */
+
+
+/* =========================================================
+   📌 HEADER HALAMAN INPUT PRODUKSI
+========================================================= */
+/* Blok judul atas berwarna oranye dengan dekorasi ikon produksi transparan di pojok;
+   memiliki efek hover mengambang sebagai umpan balik visual */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #f97316 0%, #c2410c 100%);
+    padding: 30px 40px;
+    border-radius: 20px;
+    margin-bottom: 35px;
+    box-shadow: 0 10px 25px rgba(234, 88, 12, 0.25);
+    color: white;
+    position: relative;
+    overflow: hidden;                          /* Mencegah ikon jumbo keluar batas header */
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease;
+    cursor: default;
+}
+
+/* =========================================================
+   📌 EFEK HOVER HEADER
+========================================================= */
+/* Header terangkat ke atas dan bayangan menguat saat kursor melewatinya */
+.page-header:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 35px rgba(234, 88, 12, 0.4);
+}
+
+/* =========================================================
+   🎨 DEKORASI WATERMARK IKON PRODUKSI
+========================================================= */
+/* Ikon raksasa transparan di pojok kanan atas sebagai hiasan latar header */
+.page-header::after {
+    content: '🍳';
+    position: absolute;
+    right: 220px;
+    top: -20px;
+    font-size: 140px;
+    opacity: 0.15;                             /* Sangat pudar agar tidak menghalangi teks */
+    transform: rotate(15deg);
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.6s ease;
+    pointer-events: none;                      /* Ikon tidak bisa diklik */
+}
+
+/* Ikon berputar dan membesar saat header di-hover */
+.page-header:hover::after {
+    transform: rotate(-5deg) scale(1.15) translateY(-5px);
+    opacity: 0.3;
+}
+
+/* =========================================================
+   🔤 KONTAINER TEKS HEADER
+========================================================= */
+/* Berada di atas z-index dekorasi watermark agar teks tetap terlihat */
+.header-text {
+    position: relative;
+    z-index: 1;
+}
+
+/* Judul halaman besar dan tebal */
+.header-text h2 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    margin: 0 0 8px 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+/* Teks deskripsi di bawah judul */
+.header-text p {
+    font-size: 1.05rem;
+    opacity: 0.9;
+    margin: 0;
+    font-weight: 500;
+    color: white;
+}
+
+
+/* =========================================================
+   🔘 TOMBOL TAMBAH DATA PRODUKSI (BTN PRIMARY)
+========================================================= */
+/* Tombol hijau utama untuk membuka form tambah data produksi harian */
+.btn-primary {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;                       /* Bentuk kapsul melingkar penuh */
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Tombol naik dan bayangan menguat saat hover */
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+/* =========================================================
+   🔘 TOMBOL TAMBAH DI DALAM HEADER (WARNA PUTIH)
+========================================================= */
+/* Override: tombol di dalam header oranye menggunakan latar putih dengan teks oranye */
+.page-header .btn-primary {
+    background: white;
+    color: #ea580c;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Tombol putih menguning saat hover sebagai umpan balik visual */
+.page-header .btn-primary:hover {
+    background: #fffaf0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    color: #c2410c;
+}
+
+/* =========================================================
+   ✏️ TOMBOL EDIT DAN HAPUS — DASAR
+========================================================= */
+/* Gaya bersama tombol kecil aksi di setiap baris tabel */
+.btn-edit,
+.btn-delete {
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    margin-right: 5px;
+}
+
+/* =========================================================
+   ✏️ TOMBOL EDIT (KUNING)
+========================================================= */
+/* Kuning muda menandakan aksi mengubah/memperbaiki data produksi */
+.btn-edit {
+    background: #fef08a;
+    color: #a16207;
+    border: 1px solid #fde047;
+}
+
+/* Tombol edit berubah kuning penuh dan membesar saat hover */
+.btn-edit:hover {
+    background: #eab308;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(234, 179, 8, 0.3);
+}
+
+/* =========================================================
+   🗑️ TOMBOL HAPUS (MERAH)
+========================================================= */
+/* Merah muda menandakan aksi destruktif: menghapus data produksi */
+.btn-delete {
+    background: #fee2e2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+}
+
+/* Tombol hapus berubah merah penuh saat hover sebagai peringatan */
+.btn-delete:hover {
+    background: #ef4444;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+}
+
+/* =========================================================
+   📥 TOMBOL EKSPOR CSV
+========================================================= */
+/* Tombol biru bergradien untuk mengunduh data produksi ke file CSV */
+.btn-export {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Tombol ekspor naik dan bayangan biru menguat saat hover */
+.btn-export:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+
+/* =========================================================
+   📊 KARTU STATISTIK KILAT PRODUKSI (QUICK STATS)
+========================================================= */
+/* Tiga kartu ringkasan di atas tabel: total telur, total pakan, dan mortalitas */
+.produksi-stats .stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;           
+}
+
+/* Kartu naik dan bayangan oranye muncul saat di-hover */
+.produksi-stats .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(249, 115, 22, 0.15);
+}
+
+/* =========================================================
+   🎨 WARNA AKSEN KARTU STATISTIK — KUNING (KARTU 1)
+========================================================= */
+/* Kartu pertama: kuning untuk total telur yang diproduksi */
+.produksi-stats .stat-card:nth-child(1) {
+    border-left-color: #ffffff;
+}
+
+.produksi-stats .stat-card:nth-child(1) .stat-icon {
+    background: rgba(234, 179, 8, 0.2);
+}
+
+/* =========================================================
+   🎨 WARNA AKSEN KARTU STATISTIK — ORANYE (KARTU 2)
+========================================================= */
+/* Kartu kedua: oranye untuk total pakan yang dikonsumsi */
+.produksi-stats .stat-card:nth-child(2) {
+    border-left-color: #ffffff;
+}
+
+.produksi-stats .stat-card:nth-child(2) .stat-icon {
+    background: rgba(249, 115, 22, 0.2);
+}
+
+/* =========================================================
+   🎨 WARNA AKSEN KARTU STATISTIK — BIRU (KARTU 3)
+========================================================= */
+/* Kartu ketiga: biru untuk jumlah kematian/mortalitas ayam */
+.produksi-stats .stat-card:nth-child(3) {
+    border-left-color: #ffffff;
+}
+
+.produksi-stats .stat-card:nth-child(3) .stat-icon {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+
+/* =========================================================
+   🃏 WRAPPER KARTU TABEL UTAMA
+========================================================= */
+/* Kotak putih lebar dengan aksen garis atas biru sebagai wadah tabel data produksi */
+.table-container.shadow-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    border-top: 5px solid #3b82f6;             /* Penanda biru identitas kartu tabel */
+    margin-bottom: 2rem;
+}
+
+
+/* =========================================================
+   🏷️ HEADER BARIS JUDUL DAN PENCARIAN TABEL
+========================================================= */
+/* Baris di atas tabel memuat judul dan kotak pencarian/filter */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px dashed #f1f5f9;
+    flex-wrap: wrap;                           /* Pindah baris jika layar disempitkan */
+    gap: 1rem;
+}
+
+/* Teks judul di sisi kiri header tabel */
+.table-header h3 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+/* =========================================================
+   🔍 KOTAK PENCARIAN DI HEADER TABEL
+========================================================= */
+/* Input berbentuk kapsul untuk mencari data berdasarkan kata kunci */
+.table-header input {
+    padding: 10px 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    width: 250px;
+    background: #f8fafc;
+    transition: all 0.3s;
+    outline: none;
+}
+
+/* Garis tepi berubah oranye saat input pencarian aktif */
+.table-header input:focus {
+    background: #fff;
+    border-color: #f97316;
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+}
+
+/* =========================================================
+   🔧 AREA AKSI FILTER DAN EKSPOR
+========================================================= */
+/* Baris filter periode + tombol ekspor di sisi kanan header tabel */
+.table-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;                           /* Mencegah tumpuk di layar HP */
+}
+
+/* =========================================================
+   🏷️ LABEL FILTER
+========================================================= */
+/* Teks kecil di depan dropdown filter untuk memberi konteks */
+.filter-label {
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.95rem;
+}
+
+/* =========================================================
+   🔽 INPUT FILTER (DROPDOWN/DATE)
+========================================================= */
+/* Dropdown atau date picker untuk memfilter data berdasarkan periode */
+.table-actions .filter-input {
+    padding: 10px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    background: #f8fafc;
+    color: #334155;
+    transition: all 0.3s;
+    width: auto;
+}
+
+/* Garis tepi berubah hijau saat filter aktif */
+.table-actions .filter-input:focus {
+    background: #fff;
+    border-color: #10b981;                     /* Hijau sebagai warna aksen filter */
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+
+/* =========================================================
+   🔘 TOMBOL TERAPKAN FILTER
+========================================================= */
+/* Tombol abu untuk menerapkan filter yang dipilih ke tabel */
+.btn-filter {
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: none;
+    background: #e2e8f0;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #475569;
+    transition: all 0.3s;
+}
+
+/* Tombol filter sedikit menggelap saat hover */
+.btn-filter:hover {
+    background: #cbd5e1;
+    color: #1e293b;
+}
+
+/* =========================================================
+   📜 WRAPPER TABEL RESPONSIF
+========================================================= */
+/* Membungkus tabel dengan scroll horizontal di layar sempit */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 12px;
+}
+
+/* =========================================================
+   📋 TABEL DATA PRODUKSI
+========================================================= */
+/* Tabel tanpa border bergabung untuk tampilan bersih antar sel */
+.data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* =========================================================
+   📋 SEL TABEL (TH & TD)
+========================================================= */
+/* Padding, ukuran font, dan perataan tengah untuk semua sel tabel */
+.data-table th,
+.data-table td {
+    padding: 16px 15px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    color: #334155;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* =========================================================
+   🏷️ KEPALA KOLOM TABEL (HEADER TH)
+========================================================= */
+/* Latar abu, teks kapital, dan posisi sticky agar terlihat saat scroll */
+.data-table th {
+    background: #f8fafc;                       /* Sedikit berbeda dari isi tabel */
+    font-weight: 700;
+    text-align: center;
+    color: #475569;
+    position: sticky;
+    top: 0;                                    /* Kepala tabel selalu terlihat saat discroll */
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+/* =========================================================
+   🖱️ EFEK HOVER BARIS TABEL
+========================================================= */
+/* Baris tabel berubah latar saat dilewati kursor */
+.data-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.data-table tbody tr:hover {
+    background-color: #fffaf0;                 /* Kuning sangat pucat ala tema oranye */
+}
+
+
+/* =========================================================
+   🏷️ LENCANA STATUS PRODUKSI (BADGE)
+========================================================= */
+/* Kapsul kecil berwarna yang menandai kategori atau status data produksi */
+.badge {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: inline-block;
+    letter-spacing: 0.3px;
+    text-align: center;
+}
+
+/* =========================================================
+   💚 BADGE STATUS AKTIF (HIJAU)
+========================================================= */
+.badge-aktif {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+/* =========================================================
+   💙 BADGE STATUS PANEN (BIRU)
+========================================================= */
+.badge-panen {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
+/* =========================================================
+   ❤️ BADGE STATUS AFKIR (MERAH)
+========================================================= */
+.badge-afkir {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+
+/* =========================================================
+   💬 TAMPILAN KOSONG (EMPTY STATE)
+========================================================= */
+/* Pesan terpusat yang tampil saat belum ada data produksi harian */
+.empty-state {
+    display: none;
+    text-align: center;
+    padding: 60px !important;
+    color: #94a3b8 !important;
+    font-style: italic;
+    background: #f8fafc;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+/* =========================================================
+   🖼️ IKON EMPTY STATE
+========================================================= */
+/* Emoji besar di atas teks kosong agar tampilan lebih ramah */
+.empty-state .empty-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+
+/* =========================================================
+   🪟 OVERLAY MODAL (BACKDROP)
+========================================================= */
+/* Lapisan hitam buram yang menutupi halaman di balik kotak form dialog */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);                /* Blur latar di balik modal */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modal ditampilkan saat kelas 'show' diberikan via JavaScript */
+.modal.show {
+    display: flex;
+}
+
+/* =========================================================
+   🃏 KONTEN MODAL (KOTAK FORM)
+========================================================= */
+/* Kotak putih modal di tengah overlay dengan aksen garis atas oranye */
+.modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;                          /* Scroll di dalam modal jika terlalu panjang */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    position: relative;
+    border-top: 5px solid #f97316;             /* Penanda oranye identitas modul produksi */
+    scroll-behavior: smooth;
+}
+
+/* =========================================================
+   🖱️ SCROLLBAR MODAL — JALUR (TRACK)
+========================================================= */
+/* Jalur scrollbar di dalam modal dengan latar oranye sangat transparan */
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(249, 115, 22, 0.06);
+    border-radius: 100px;
+    margin: 10px 0;                            /* Jarak vertikal agar tidak menyentuh sudut modal */
+}
+
+/* =========================================================
+   🖱️ SCROLLBAR MODAL — PEGANGAN (THUMB)
+========================================================= */
+/* Batang scrollbar bergradien kuning-oranye sesuai tema modul */
+.modal-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ffcc70 0%, #f97316 100%);
+    border-radius: 100px;
+}
+
+/* Pegangan lebih gelap saat di-hover */
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #fbbf24 0%, #ea580c 100%);
+}
+
+/* =========================================================
+   🏷️ HEADER MODAL (JUDUL + TOMBOL TUTUP)
+========================================================= */
+/* Baris atas modal memuat judul dan tombol ×, dipisahkan garis putus-putus */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 2px dashed #f1f5f9;
+    padding-bottom: 15px;
+}
+
+/* Teks judul form dialog */
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+/* =========================================================
+   ✖️ TOMBOL TUTUP MODAL (×)
+========================================================= */
+/* Tombol X abu kecil untuk menutup dialog tanpa menyimpan */
+.close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #94a3b8;
+    transition: 0.3s;
+    line-height: 1;
+}
+
+/* Berubah merah dan memutar saat hover */
+.close-btn:hover {
+    color: #ef4444;
+    transform: rotate(90deg);
+}
+
+
+/* =========================================================
+   📋 GRUP INPUT FORM MODAL (FORM GROUP)
+========================================================= */
+/* Kontainer satu baris input yang memberi jarak antar field */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* =========================================================
+   🏷️ LABEL INPUT FORM MODAL
+========================================================= */
+/* Teks panduan di atas setiap kotak input di dalam modal */
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 0.95rem;
+}
+
+/* =========================================================
+   ✏️ KOTAK INPUT DAN SELECT DI MODAL
+========================================================= */
+/* Kotak input abu muda yang berubah putih dan beroranye saat diklik */
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: all 0.3s;
+    background: #f8fafc;
+    color: #334155;
+}
+
+/* =========================================================
+   ✏️ EFEK FOKUS INPUT MODAL (AKTIF)
+========================================================= */
+/* Garis tepi berubah oranye dan kotak naik sedikit saat input aktif diketik */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #f97316;                     /* Oranye identitas modul produksi */
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   💬 TEKS BANTUAN INPUT (HINT TEXT)
+========================================================= */
+/* Keterangan miring kecil di bawah input tentang format atau aturan pengisian */
+.hint-text {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 5px;
+    display: block;
+    font-style: italic;
+}
+
+/* =========================================================
+   🔘 AREA TOMBOL AKSI MODAL (SIMPAN & BATAL)
+========================================================= */
+/* Baris tombol di bagian bawah modal, sejajar ke kanan */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* =========================================================
+   ⚪ TOMBOL BATAL DI MODAL (ABU)
+========================================================= */
+/* Tombol abu untuk menutup modal tanpa menyimpan perubahan */
+.modal-actions .btn-secondary {
+    background-color: #f1f5f9;
+    color: #64748b;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+/* Tombol batal menggelap saat hover */
+.modal-actions .btn-secondary:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   📦 GAYA VISUAL GRUP BATCH (ACCORDION)
+========================================================= */
+
+/* Baris Header Grup: Dibuat lebih modern dengan gradien dan efek interaktif */
+.batch-group-header {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.batch-group-header td {
+    background: linear-gradient(to right, #f8fafc 0%, #f1f5f9 100%) !important;
+    text-align: left !important;
+    padding: 14px 20px !important;
+    font-weight: 800 !important;
+    color: #4f46e5 !important;
+    border-left: 6px solid #6366f1 !important;
+}
+
+/* Efek hover agar header terasa interaktif */
+.batch-group-header:hover td {
+    background: linear-gradient(to right, #f1f5f9 0%, #e2e8f0 100%) !important;
+    color: #4338ca !important;
+}
+
+/* Animasi Ikon Buka/Tutup */
+.batch-group-header .toggle-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 24px;
+    background: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(99, 102, 241, 0.2);
+    margin-right: 12px;
+    font-size: 0.8rem;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.batch-group-header.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+}
+
+/* Gaya Baris Data di dalam Grup */
+.data-row {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Indikator vertikal di samping baris data untuk menunjukkan hubungan dengan grup */
+.data-row td:first-child {
+    position: relative;
+}
+
+.data-row td:first-child::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #e2e8f0;
+    opacity: 0.5;
+}
+
+/* Efek hover pada baris data agar lebih hidup */
+.data-row:hover td {
+    background-color: #f0f9ff !important;
+    color: #0c4a6e !important;
+}
+
+/* Hint klik di pojok kanan header */
+.header-hint {
+    float: right;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    margin-top: 2px;
+}
+
+/* Tombol Hapus per Minggu */
+.btn-delete-week {
+    background: #fee2e2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-delete-week:hover {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+}
+
+/* 📱 RESPONSIF — LAYAR KECIL (≤768px) */
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .page-header::after {
+        right: 10px;
+        top: 10px;
+        font-size: 100px;
+    }
+}
+
+/* =========================================================
+   📊 STYLE TAMBAHAN: INPUT PRODUKSI MINGGUAN (BULK)
+   ========================================================= */
+
+/* Container untuk tombol toggle mode */
+.mode-toggle-container {
+    display: flex;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 12px;
+    gap: 4px;
+    margin-top: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+/* Tombol toggle mode */
+.mode-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Tombol toggle aktif */
+.mode-btn.active {
+    background: white;
+    color: #ea580c;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.mode-btn:hover:not(.active) {
+    background: rgba(226, 232, 240, 0.5);
+    color: #334155;
+}
+
+/* Container untuk grid 7 baris mingguan */
+.weekly-rows-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+/* Baris kartu per hari */
+.weekly-row {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.weekly-row:hover {
+    border-color: #cbd5e1;
+    background: #f1f5f9;
+}
+
+/* Header baris per hari */
+.weekly-row-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #e2e8f0;
+    padding-bottom: 8px;
+}
+
+.weekly-row-date .day-name {
+    font-weight: 700;
+    color: #4f46e5;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.weekly-row-date .day-date {
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.85rem;
+}
+
+/* Kumpulan input per hari */
+.weekly-row-inputs {
+    display: flex;
+    gap: 6px;
+}
+
+/* Input group */
+.weekly-input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.weekly-input-group label {
+    font-size: 0.65rem !important;
+    color: #64748b !important;
+    margin-bottom: 0 !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    text-align: center;
+    line-height: 1.2;
+    min-height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.weekly-input-group input {
+    padding: 8px 6px !important;
+    font-size: 0.85rem !important;
+    border-radius: 8px !important;
+    border: 1px solid #cbd5e1 !important;
+    background: #ffffff !important;
+    font-weight: 500;
+    text-align: center;
+}
+
+.weekly-input-group input:focus {
+    border-color: #f97316 !important;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15) !important;
+}
+
+/* Input readonly total */
+.weekly-input-group.readonly-group input {
+    background-color: #e2e8f0 !important;
+    color: #475569 !important;
+    font-weight: 700 !important;
+    pointer-events: none !important;
+    border-color: #cbd5e1 !important;
+    cursor: not-allowed;
+}
+
+/* Responsif untuk grid mingguan pada layar kecil */
+@media (max-width: 480px) {
+    .weekly-row-inputs {
+        flex-wrap: wrap;
+    }
+    .weekly-input-group {
+        min-width: calc(50% - 6px);
+    }
+    .weekly-input-group.readonly-group {
+        min-width: calc(50% - 6px);
+    }
+}
+
+/* =========================================================
+   🚫 MENYEMBUNYIKAN SPIN BUTTONS (ARROW ATAS/BAWAH)
+   ========================================================= */
+/* Menghapus tombol panah naik/turun bawaan browser pada kolom input angka */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Untuk kompatibilitas Mozilla Firefox */
+}
+
+/* =========================================================
+   📊 STYLE KHUSUS MODAL UNTUK INPUT MINGGUAN (WEEKLY MODE)
+   ========================================================= */
+/* Ketika formulir dialihkan ke Mode Mingguan, modal tidak boleh scroll di dalam popup.
+   Sebaliknya, ia memanjang secara bebas tanpa scrollbar internal dan scroll pada overlay luar browser,
+   sehingga behave seperti formulir biasa. Kotak modal juga diperlebar agar grid input 7 harinya lega. */
+#produksiModal.weekly-mode {
+    align-items: center;
+    overflow-y: hidden;
+    padding: 0;
+}
+
+#produksiModal.weekly-mode .modal-content {
+    max-height: 90vh; /* Mengembalikan scrollbar internal di dalam pop-up modal */
+    overflow-y: auto;
+    max-width: 500px; /* Disamakan ukurannya dengan Harian (500px) */
+    margin: 0;
+}

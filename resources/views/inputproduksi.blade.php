@@ -9,13 +9,270 @@
 
 @section('content')
     <!-- Link ke CSS Khusus Halaman Input Produksi -->
-    <link rel="stylesheet" href="{{ asset('css/inputproduksi.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/inputproduksi/inputproduksi.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <!-- Halaman Kosong -->
+    <!-- Bagian Kop Halaman: Menampilkan Judul dan Tombol Aksi "Tambah" -->
+    <header class="page-header animate__animated animate__fadeInDown">
+      <div class="header-text">
+        <h2>📝 Input Produksi Harian</h2>
+        <p>Catat hasil produksi telur setiap kandang per harinya</p>
+      </div>
+      <button class="btn-primary animate__animated animate__pulse animate__infinite" onclick="openProduksiModal()">
+        ➕ Tambah Produksi
+      </button>
+    </header>
+
+    <!-- Bagian Statistik Ringkas: Menampilkan kartu ringkasan telur otomatis -->
+    <section class="quick-stats produksi-stats animate__animated animate__fadeInUp">
+      <div class="stat-card">
+        <div class="stat-icon">🥚</div>
+        <div class="stat-info">
+          <h4>Total Telur</h4>
+          <p id="totalTelurHariIni">0 Butir</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+          <h4>Telur Baik</h4>
+          <p id="totalTelurBaik">0 Butir</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🍳</div>
+        <div class="stat-info">
+          <h4>Telur Cacat/Pecah</h4>
+          <p id="totalTelurCacat">0 Butir</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🐣</div>
+        <div class="stat-info">
+          <h4>Total Populasi Ayam</h4>
+          <p id="totalPopulasiAyam">0 Ekor</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">❌</div>
+        <div class="stat-info">
+          <h4 id="labelAyamTidakBertelur">Total Ayam Tidak Bertelur</h4>
+          <p id="totalAyamTidakBertelur">0 Ekor</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bagian Tabel Data: Menampilkan riwayat pencatatan harian yang bisa difilter -->
+    <section class="data-produksi-section animate__animated animate__fadeInUp">
+      <div class="table-container shadow-card">
+        <div class="table-header">
+          <h3>📋 Histori Produksi Harian</h3>
+          <div class="table-actions">
+            <label for="filterTanggal" class="filter-label">Filter Tanggal:</label>
+            <input type="date" id="filterTanggal" class="filter-input" onchange="filterTable()"
+              title="Filter Tanggal" />
+            <button class="btn-filter" onclick="resetFilter()">
+              Semua Data
+            </button>
+            <button class="btn-export" onclick="downloadLaporanCSV()" title="Unduh Laporan Data Produksi">
+              📥 Ekspor CSV
+            </button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table" id="produksiTable">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Batch</th>
+                <th>Jenis Telur</th>
+                <th>Kandang</th>
+                <th>Telur Baik</th>
+                <th>Telur Cacat</th>
+                <th>Total Telur</th>
+                <th>Ayam Tidak Bertelur</th>
+                <th>Ayam Mati</th>
+                <th>Total Ayam</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="produksiTableBody">
+              <!-- Data dimuat dari JS -->
+            </tbody>
+          </table>
+          <div id="emptyState" class="empty-state">
+            <span class="empty-icon">📂</span>
+            <p>Belum ada data produksi. Silakan tambah data baru!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <!-- ========================= MODAL / POP-UP FORMULIR ========================== -->
+  <!-- Kotak dialog melayang, dipanggil saat "Tambah Produksi" atau "Edit" ditekan -->
+  <div id="produksiModal" class="modal">
+    <div class="modal-content animate__animated animate__zoomIn">
+      <div class="modal-header">
+        <h3 id="modalTitle">Tambah Data Produksi</h3>
+        <button class="close-btn" onclick="closeProduksiModal()">
+          &times;
+        </button>
+      </div>
+      <form id="produksiForm" onsubmit="saveProduksiData(event)">
+        <input type="hidden" id="produksiId" />
+        <input type="hidden" id="targetMinggu" />
+
+        <!-- ===== FIELD BATCH (Diisi dinamis dari data dataAyamTAalip) ===== -->
+        <div class="form-group">
+          <label for="batchProduksi">Batch Ayam</label>
+          <select id="batchProduksi" required onchange="autoFillFromBatch()">
+            <option value="" disabled selected>Pilih Batch Ayam...</option>
+            <!-- Diisi otomatis oleh JavaScript dari data dataAyamData -->
+          </select>
+          <small class="hint-text">*Data batch diambil dari halaman Data Ayam</small>
+        </div>
+
+        <!-- ===== TOGGLE MODE INPUT (Harian vs Mingguan) ===== -->
+        <div class="form-group" id="inputModeGroup">
+          <label>Mode Input</label>
+          <div class="mode-toggle-container">
+            <button type="button" id="btnModeHarian" class="mode-btn active" onclick="switchInputMode('harian')">📅 Harian (1 Hari)</button>
+            <button type="button" id="btnModeMingguan" class="mode-btn" onclick="switchInputMode('mingguan')">📊 Mingguan (7 Hari)</button>
+          </div>
+          <input type="hidden" id="inputMode" value="harian" />
+        </div>
+
+        <!-- Tanggal: Diisi otomatis hari ini, tapi bisa diubah jika ingin input data kemarin -->
+        <div class="form-group" id="tglProduksiGroup">
+          <label for="tglProduksi" id="labelTglProduksi">Tanggal Produksi</label>
+          <input type="date" id="tglProduksi" required title="Pilih tanggal pencatatan produksi" onchange="onStartDateChange()" />
+          <small class="hint-text" id="tglHint">📅 Pilih tanggal produksi (default: Hari Ini)</small>
+        </div>
+
+        <!-- Kandang: diisi & dikunci otomatis saat batch dipilih -->
+        <div class="form-group">
+          <label for="kandangProduksi">Kandang</label>
+          <!-- Hidden input sebagai backup agar nilai kandang tetap terkirim saat select disabled -->
+          <input type="hidden" id="kandangProduksiHidden" name="kandangProduksiHidden" />
+          <input type="text" id="kandangProduksi" readonly placeholder="— otomatis dari batch —" style="
+                background-color: #e2e8f0;
+                color: #64748b;
+                cursor: not-allowed;
+              " title="Terisi otomatis dari data batch yang dipilih" />
+          <small class="hint-text" id="kandangHint">⬆️ Terisi otomatis saat batch dipilih</small>
+        </div>
+
+        <!-- Jenis Telur Ayam: diisi & dikunci otomatis saat batch dipilih -->
+        <div class="form-group">
+          <label for="jenisTelurProduksi">Jenis Telur Ayam</label>
+          <input type="text" id="jenisTelurProduksi" readonly placeholder="— otomatis dari batch —" style="
+                background-color: #e2e8f0;
+                color: #64748b;
+                cursor: not-allowed;
+              " title="Terisi otomatis dari data batch yang dipilih" />
+          <small class="hint-text" id="jenisHint">⬆️ Terisi otomatis saat batch dipilih</small>
+        </div>
+
+        <!-- ===== CONTAINER FIELD INPUT HARIAN ===== -->
+        <div id="dailyFieldsContainer">
+          <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <div style="flex: 1;">
+              <label for="telurPapan" style="font-size: 0.85rem; color: #475569; font-weight: 600;">Papan</label>
+              <input type="number" id="telurPapan" min="0" placeholder="0" oninput="calculateTotal()" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; margin-top: 5px; font-family: inherit; font-size: 0.95rem;" />
+            </div>
+            <div style="flex: 1;">
+              <label for="telurSisa" style="font-size: 0.85rem; color: #475569; font-weight: 600;">Sisa (Btr)</label>
+              <input type="number" id="telurSisa" min="0" max="29" placeholder="0" oninput="calculateTotal()" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; margin-top: 5px; font-family: inherit; font-size: 0.95rem;" />
+            </div>
+            <div style="flex: 1;">
+              <label for="telurCacat" style="font-size: 0.85rem; color: #475569; font-weight: 600;">Cacat (Btr)</label>
+              <input type="number" id="telurCacat" min="0" required placeholder="0" oninput="calculateTotal()" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; margin-top: 5px; font-family: inherit; font-size: 0.95rem;" />
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <div style="flex: 1;">
+              <label for="telurBaik" style="font-size: 0.85rem; color: #475569; font-weight: 600;">Baik (Btr)</label>
+              <input type="number" id="telurBaik" min="0" required placeholder="0" oninput="calculateTotal()" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; margin-top: 5px; font-family: inherit; font-size: 0.95rem;" />
+            </div>
+            <div style="flex: 1;">
+              <label for="ayamMatiHariIni" style="font-size: 0.85rem; color: #ef4444; font-weight: 600;">Mati (Ekor)</label>
+              <input type="number" id="ayamMatiHariIni" min="0" value="0" required placeholder="0" oninput="calculateTotal()" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #fca5a5; margin-top: 5px; font-family: inherit; font-size: 0.95rem;" title="Mati otomatis memotong populasi" />
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-bottom: 15px; background-color: #f1f5f9; padding: 12px; border-radius: 8px; border: 1px dashed #cbd5e1;">
+            <div style="flex: 1;">
+              <label for="totalTelur" style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Total Telur</label>
+              <input type="number" id="totalTelur" readonly style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #cbd5e1; margin-top: 5px; background-color: #e2e8f0; font-weight: bold; pointer-events: none; font-family: inherit; font-size: 0.9rem;" value="0" />
+            </div>
+            <div style="flex: 1;">
+              <label for="ayamTidakBertelur" style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Tdk Bertelur</label>
+              <input type="number" id="ayamTidakBertelur" readonly style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #cbd5e1; margin-top: 5px; background-color: #e2e8f0; font-weight: bold; pointer-events: none; font-family: inherit; font-size: 0.9rem;" value="0" />
+            </div>
+            <div style="flex: 1;">
+              <label for="totalAyam" style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Total Ayam</label>
+              <input type="number" id="totalAyamInput" readonly style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #cbd5e1; margin-top: 5px; background-color: #e2e8f0; font-weight: bold; pointer-events: none; font-family: inherit; font-size: 0.9rem;" value="0" />
+            </div>
+          </div>
+          <small id="validasiHint" style="display: none; margin-top: -5px; margin-bottom: 15px; font-size: 0.78rem; font-weight: 500; padding: 6px 10px; border-radius: 6px; background: #fef9ec; border: 1px solid #fde68a; line-height: 1.4;"></small>
+
+          <!-- Integrasi Pakan Harian (Opsional) -->
+          <div class="form-group" id="pakanProduksiGroup" style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px dashed #cbd5e1; margin-top: 10px;">
+            <label style="font-weight: 600; color: #4f46e5; display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 0.9rem;">
+              🥬 Catat Pemakaian Pakan Harian <small style="font-weight: normal; color: #64748b;">(Opsional)</small>
+            </label>
+            <div style="display: flex; gap: 10px; margin-top: 8px;">
+              <div style="flex: 1;">
+                <label for="pakanJenisProduksi" style="font-size: 0.8rem; color: #64748b; font-weight: 500; display: block; margin-bottom: 3px;">Jenis Pakan</label>
+                <select id="pakanJenisProduksi" style="font-family: inherit; font-size: 0.85rem; padding: 8px 10px; border-radius: 6px; border: 1px solid #cbd5e1; width: 100%;">
+                  <option value="" selected>-- Pilih Pakan --</option>
+                </select>
+              </div>
+              <div style="flex: 1;">
+                <label for="pakanJumlahProduksi" style="font-size: 0.8rem; color: #64748b; font-weight: 500; display: block; margin-bottom: 3px;">Jumlah (Kg)</label>
+                <input type="number" id="pakanJumlahProduksi" min="0.1" step="0.1" placeholder="cth: 15.5" style="font-family: inherit; font-size: 0.85rem; padding: 8px 10px; border-radius: 6px; border: 1px solid #cbd5e1; width: 100%;" />
+              </div>
+            </div>
+            <small class="hint-text" style="margin-top: 8px; display: block; color: #64748b;">*Memotong stok pakan & tercatat ke Modul Pakan</small>
+          </div>
+        </div>
+
+        <!-- ===== CONTAINER FIELD INPUT MINGGUAN ===== -->
+        <div id="weeklyFieldsContainer" style="display: none;">
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label style="color: #4f46e5; font-weight: 700; display: flex; align-items: center; gap: 6px; font-size: 1.05rem;">
+              📊 Input Data Produksi & Kematian 7 Hari
+            </label>
+            <small class="hint-text" style="margin-bottom: 12px; font-size: 0.8rem; line-height: 1.4; color: #ef4444;">
+              Masukkan data produksi telur harian dan jumlah kematian ayam harian selama satu minggu berturut-turut. Tanggal tiap baris terhitung otomatis dari tanggal mulai yang Anda pilih di atas. Kematian akan langsung tercatat ke Modul Kesehatan dan memotong populasi.
+            </small>
+            <div id="weeklyRows" class="weekly-rows-container">
+              <!-- Baris hari ke-1 s.d ke-7 diinjeksi via JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!--  <div class="form-group">
+                    <label for="beratTotal">Total Berat (Kg)</label>
+                    <input type="number" step="0.1" id="beratTotal" placeholder="Contoh: 15.5" required>
+                </div> -->
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeProduksiModal()">
+            Batal
+          </button>
+          <button type="submit" class="btn-primary">💾 Simpan Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
 @endsection
 
 @push('scripts')
     <!-- Script khusus untuk Halaman Input Produksi -->
-    <script src="{{ asset('js/inputproduksi.js') }}"></script>
+    <script type="module" src="{{ asset('js/inputproduksi/inputproduksi.js') }}"></script>
 @endpush
