@@ -15,7 +15,7 @@
 <body>
 
   <!-- Menyisipkan Komponent Sidebar -->
-  <x-sidebar />
+  @include('sidebar-component.sidebar')
 
   <!-- Main Content Area -->
   <main class="main-content">
