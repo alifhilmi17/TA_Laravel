@@ -1,0 +1,1076 @@
+/* =========================================================
+   SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
+   File        : keuangan.css
+   Deskripsi   : Gaya visual khusus halaman Manajemen Keuangan.
+   Mencakup    : header hijau, grid layout form-tabel, input form,
+                 radio button, kartu saldo, tabel riwayat, badge,
+                 tombol aksi, dan responsif mobile.
+========================================================= */
+
+
+/* =========================================================
+   📌 HEADER HALAMAN KEUANGAN
+========================================================= */
+/* Blok judul paling atas berwarna hijau dengan dekorasi ikon kartu kredit blur di pojok;
+   memberikan efek hover mengambang untuk memperkuat kesan interaktif */
+.page-header {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    padding: 30px 40px;
+    border-radius: 20px;
+    margin-bottom: 35px;
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.25);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease;
+    cursor: default;
+}
+
+/* =========================================================
+   📌 EFEK HOVER HEADER
+========================================================= */
+/* Header terangkat sedikit ke atas dan bayangan menguat saat dilewati kursor */
+.page-header:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 35px rgba(16, 185, 129, 0.4);
+}
+
+/* =========================================================
+   🎨 DEKORASI WATERMARK IKON DI HEADER
+========================================================= */
+/* Ikon kartu kredit raksasa transparan di pojok kanan sebagai hiasan latar header */
+.page-header::after {
+    content: '💳';
+    position: absolute;
+    right: 20px;
+    top: -20px;
+    font-size: 140px;
+    opacity: 0.15;
+    transform: rotate(-15deg);
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.6s ease;
+    pointer-events: none;          /* Ikon tidak bisa diklik, hanya dekorasi */
+}
+
+/* Ikon watermark berputar dan membesar saat header di-hover */
+.page-header:hover::after {
+    transform: rotate(5deg) scale(1.15) translateY(-5px);
+    opacity: 0.3;
+}
+
+/* =========================================================
+   🔤 JUDUL TEKS HEADER (H2)
+========================================================= */
+/* Teks nama halaman berukuran besar, tebal, dengan bayangan halus */
+.page-header h2 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    margin: 0 0 8px 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 1;                    /* Pastikan teks di atas dekorasi watermark */
+    letter-spacing: 0.5px;
+}
+
+/* =========================================================
+   📝 PARAGRAF DESKRIPSI HEADER
+========================================================= */
+/* Teks pendukung di bawah judul header; sedikit transparan sebagai informasi sekunder */
+.page-header p {
+    font-size: 1.05rem;
+    opacity: 0.9;
+    margin: 0;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* =========================================================
+   📐 GRID LAYOUT UTAMA (FORM KIRI + TABEL KANAN)
+========================================================= */
+/* Membagi halaman menjadi dua kolom: form input (1 bagian) dan tabel data keuangan (2.2 bagian) */
+.finance-container {
+    display: grid;
+    grid-template-columns: 1fr 2.2fr;
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+/* =========================================================
+   📐 RESPONSIF GRID — LAYAR MENENGAH (≤992px)
+========================================================= */
+/* Di tablet/layar kecil, dua kolom menjadi satu kolom bertumpuk */
+@media (max-width: 992px) {
+    .finance-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   🃏 KARTU UTAMA (SHADOW CARD)
+========================================================= */
+/* Kotak putih dengan bayangan lembut yang menjadi wadah form input maupun tabel data */
+.shadow-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    position: relative;
+}
+
+/* =========================================================
+   🟢 AKSEN KARTU FORM INPUT (GARIS ATAS HIJAU)
+========================================================= */
+/* Garis hijau di bagian atas kartu form untuk membedakannya secara visual dari kartu data */
+.finance-form-card {
+    border-top: 5px solid #10b981;
+}
+
+/* =========================================================
+   🔵 AKSEN KARTU DATA TABEL (GARIS ATAS BIRU)
+========================================================= */
+/* Garis hijau di bagian atas kartu tabel untuk memberi identitas visual berbeda */
+.finance-data-card {
+    border-top: 5px solid #10b981;
+}
+
+/* =========================================================
+   🏷️ HEADER FORM DAN HEADER TABEL
+========================================================= */
+/* Baris judul dan aksi di bagian atas kartu form maupun tabel;
+   dipisahkan dari konten di bawahnya dengan garis putus-putus halus */
+.form-header,
+.table-header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px dashed #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Judul teks dalam baris header form dan tabel */
+.form-header h3,
+.table-header h3 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   📋 GRUP INPUT FORM (FORM GROUP)
+========================================================= */
+/* Kontainer satu baris formulir yang memuat label dan satu elemen input */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* =========================================================
+   🏷️ LABEL INPUT FORM
+========================================================= */
+/* Teks panduan di atas setiap kotak input yang menjelaskan data apa yang dimasukkan */
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 0.95rem;
+}
+
+/* =========================================================
+   ✏️ KOTAK INPUT TEKS, ANGKA, TANGGAL, DAN SELECT
+ ========================================================= */
+/* Tampilan standar kotak input dan select: abu muda saat kosong, penuh border membulat */
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    background-color: #f8fafc;
+    color: #334155;
+}
+
+/* Kustomisasi tampilan Select Dropdown agar premium */
+.form-group select {
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    cursor: pointer;
+    padding-right: 40px; /* Cegah teks tabrakan dengan ikon panah */
+}
+
+/* =========================================================
+   ✏️ EFEK FOKUS INPUT & SELECT FORM
+ ========================================================= */
+/* Garis tepi berubah hijau emerald dan kotak naik sedikit saat aktif */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+    outline: none;
+    background-color: #fff;
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   🔘 KELOMPOK RADIO BUTTON (PEMASUKAN / PENGELUARAN)
+========================================================= */
+/* Baris dua pilihan tipe transaksi yang tersusun sejajar */
+.radio-group {
+    display: flex;
+    gap: 15px;
+}
+
+/* =========================================================
+   🏷️ LABEL RADIO BUTTON
+========================================================= */
+/* Tombol pilihan berbentuk kotak membulat yang memuat teks dan tombol radio bersama */
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #475569;
+    padding: 10px 15px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+/* Label radio sedikit lebih gelap saat dilewati kursor */
+.radio-label:hover {
+    background: #e2e8f0;
+}
+
+/* =========================================================
+   🔘 ELEMEN RADIO BUTTON (LINGKARAN PILIH)
+========================================================= */
+/* Gaya lingkaran radio yang lebih besar dan berwarna aksen biru */
+.radio-label input[type="radio"] {
+    accent-color: #3b82f6;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* =========================================================
+   🔘 AREA TOMBOL AKSI FORM (SIMPAN & BERSIHKAN)
+========================================================= */
+/* Baris tombol di bagian bawah form, disusun sejajar dengan jarak antar tombol */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* =========================================================
+   🔘 STRUKTUR DASAR TOMBOL FORM
+========================================================= */
+/* Gaya bersama tombol Simpan dan Bersihkan: padding, font, flex center */
+.btn-primary,
+.btn-secondary {
+    padding: 14px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    font-size: 1rem;
+    flex: 1;                       /* Membagi lebar secara merata dengan tombol lain */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =========================================================
+   💚 TOMBOL SIMPAN (PRIMER — HIJAU)
+========================================================= */
+/* Gradien hijau menandakan aksi menyimpan data yang berhasil */
+.btn-primary {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+/* Tombol naik sedikit dan bayangan menguat saat hover */
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+/* =========================================================
+   ⚪ TOMBOL BERSIHKAN (SEKUNDER — ABU)
+========================================================= */
+/* Abu terang sebagai tombol reset form yang tidak destruktif */
+.btn-secondary {
+    background-color: #f1f5f9;
+    color: #64748b;
+}
+
+/* Warna abu menggelap dan tombol naik saat hover */
+.btn-secondary:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   💰 GRID KARTU RINGKASAN SALDO (3 KARTU DOMPET)
+========================================================= */
+/* Tiga kotak berwarna di atas tabel yang menampilkan total pemasukan, pengeluaran, dan saldo */
+.finance-summary-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* =========================================================
+   💰 BADAN KOTAK SALDO (SUMMARY BOX)
+========================================================= */
+/* Setiap kotak menampilkan label dan angka di atas gradien warna berbeda-beda */
+.summary-box {
+    padding: 20px;
+    border-radius: 16px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Kartu saldo naik sedikit saat di-hover */
+.summary-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   🎨 DEKORASI LINGKARAN ABSTRAK DI KARTU SALDO
+========================================================= */
+/* Lingkaran besar putih transparan di pojok kanan atas sebagai hiasan latar kotak saldo */
+.summary-box::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+/* Label kecil kapital nama kartu saldo */
+.summary-box h4 {
+    margin: 0 0 8px 0;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;                    /* Di atas dekorasi lingkaran */
+    font-weight: 700;
+}
+
+/* Angka nominal besar saldo */
+.summary-box p {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 800;
+    position: relative;
+    z-index: 1;
+}
+
+/* =========================================================
+   💚 KARTU PEMASUKAN (HIJAU)
+========================================================= */
+/* Gradien hijau muda menandakan uang masuk yang menyenangkan */
+.box-income {
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border: 1px solid #86efac;
+}
+.box-income h4 { color: #166534; }
+.box-income p  { color: #15803d; }
+
+/* =========================================================
+   ❤️ KARTU PENGELUARAN (MERAH)
+========================================================= */
+/* Gradien merah muda menandakan uang keluar yang perlu dipantau */
+.box-expense {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border: 1px solid #fca5a5;
+}
+.box-expense h4 { color: #991b1b; }
+.box-expense p  { color: #b91c1c; }
+
+/* =========================================================
+   💙 KARTU SALDO AKHIR (BIRU)
+========================================================= */
+/* Gradien biru muda menandakan sisa saldo yang masih tersedia */
+.box-balance {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border: 1px solid #93c5fd;
+}
+.box-balance h4 { color: #1e40af; }
+.box-balance p  { color: #1d4ed8; }
+
+
+/* =========================================================
+   🔍 INPUT PENCARIAN RIWAYAT TRANSAKSI
+========================================================= */
+/* Kotak pencarian di atas tabel untuk memfilter riwayat berdasarkan kata kunci */
+.table-actions input {
+    padding: 10px 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    width: 250px;
+    background: #f8fafc;
+    transition: all 0.3s;
+}
+
+/* Garis batas berubah biru dan kotak menjadi putih saat input aktif */
+.table-actions input:focus {
+    background: #fff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    outline: none;
+}
+
+/* =========================================================
+   📜 WRAPPER TABEL RESPONSIF
+========================================================= */
+/* Membungkus tabel dengan scroll horizontal agar tidak pecah di layar sempit */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 12px;
+}
+
+/* =========================================================
+   📋 TABEL DATA KEUANGAN
+========================================================= */
+/* Tabel tanpa garis pemisah yang bergabung (border-collapse: separate) untuk tampilan bersih */
+.data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* =========================================================
+   📋 SEL TABEL (TH & TD)
+========================================================= */
+/* Padding, ukuran font, dan warna teks standar untuk semua sel tabel */
+.data-table th,
+.data-table td {
+    padding: 16px 15px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    color: #334155;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* =========================================================
+   🏷️ KEPALA KOLOM TABEL (HEADER)
+========================================================= */
+/* Sel header dengan latar abu, teks kapital, dan posisi sticky agar tidak hilang saat scroll */
+.data-table th {
+    background: #f8fafc;                    /* Sedikit berbeda dari latar isi tabel */
+    font-weight: 700;
+    text-align: center;
+    color: #475569;
+    position: sticky;
+    top: 0;                                 /* Kepala tabel selalu terlihat saat scroll */
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+/* =========================================================
+   🖱️ TRANSISI BARIS TABEL
+========================================================= */
+/* Baris berubah latar saat dilewati kursor sebagai penanda posisi baca */
+.data-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+/* =========================================================
+   💬 TEKS KOSONG SAAT TABEL BELUM ADA DATA
+========================================================= */
+/* Pesan placeholder miring di tengah tabel saat belum ada riwayat transaksi */
+.empty-state {
+    text-align: center;
+    padding: 60px !important;
+    color: #94a3b8 !important;
+    font-style: italic;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+
+
+/* =========================================================
+   🏷️ LENCANA TIPE TRANSAKSI (BADGE)
+========================================================= */
+/* Kapsul kecil berwarna di setiap baris tabel yang menandai jenis transaksi */
+.badge-type {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: inline-block;
+    letter-spacing: 0.3px;
+}
+
+/* =========================================================
+   💚 BADGE PEMASUKAN
+========================================================= */
+/* Hijau muda untuk transaksi bertipe pemasukan */
+.badge-income {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+/* =========================================================
+   ❤️ BADGE PENGELUARAN
+========================================================= */
+/* Merah muda untuk transaksi bertipe pengeluaran */
+.badge-expense {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+/* =========================================================
+   🎨 UTILITAS WARNA TEKS KOLOM JUMLAH
+ ========================================================= */
+.text-income {
+    color: #10b981 !important;
+}
+
+.text-expense {
+    color: #ef4444 !important;
+}
+
+/* =========================================================
+   ✏️ TOMBOL EDIT BARIS TABEL (BIRU MUDA)
+========================================================= */
+/* Tombol kecil biru muda di setiap baris untuk membuka form edit transaksi */
+.btn-edit {
+    background: #e0f2fe;
+    color: #0ea5e9;
+    border: 1px solid #bae6fd;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 5px;
+}
+
+/* Tombol edit berubah biru penuh saat hover */
+.btn-edit:hover {
+    background: #0ea5e9;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3);
+}
+
+/* =========================================================
+   🗑️ TOMBOL HAPUS BARIS TABEL (MERAH)
+========================================================= */
+/* Tombol merah muda di setiap baris untuk menghapus entri transaksi */
+.btn-delete {
+    background: #fee2e2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Tombol hapus berubah merah penuh dan membesar saat hover sebagai peringatan aksi destruktif */
+.btn-delete:hover {
+    background: #ef4444;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+}
+
+/* =========================================================
+   🔍 FILTER & PENCARIAN MODERN
+========================================================= */
+.table-header-modern {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px dashed #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.table-filters {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+    padding: 8px 18px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.filter-group:hover {
+    border-color: #cbd5e1;
+    background: #fff;
+}
+
+.filter-group input[type="date"] {
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: #475569;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none; /* Standar modern */
+    cursor: pointer;
+}
+
+.filter-group span {
+    color: #94a3b8;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.search-group {
+    display: flex;
+    gap: 10px;
+}
+
+.search-group input {
+    padding: 10px 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    width: 220px;
+    background: #f8fafc;
+    transition: all 0.3s;
+}
+
+.search-group input:focus {
+    background: #fff;
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    outline: none;
+}
+
+/* =========================================================
+   📥 TOMBOL EKSPOR (HIJAU PREMIUM)
+========================================================= */
+/* Tombol biru untuk mengunduh data pakan ke file CSV */
+.btn-export {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Tombol ekspor naik dan bayangan menguat saat hover */
+.btn-export:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+/* =========================================================
+   ⏳ LOADING STATES (SPINNER & SKELETON)
+========================================================= */
+/* Loader dalam tombol */
+.loader {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ffffff;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: none;
+    animation: rotation 1s linear infinite;
+    margin-left: 8px;
+}
+
+@keyframes rotation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.btn-primary.loading .btn-text { display: none; }
+.btn-primary.loading .loader { display: inline-block; }
+
+/* Skeleton Loading untuk Tabel */
+.table-loader-container {
+    display: none;
+    padding: 20px;
+}
+
+.skeleton-row {
+    height: 45px;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* =========================================================
+   💬 EMPTY STATE MODERN
+========================================================= */
+.empty-state-modern {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    color: #94a3b8;
+    background: #f8fafc;
+    border-radius: 16px;
+    margin-top: 20px;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* =========================================================
+   🛠️ UTILITY CLASSES
+========================================================= */
+.text-right { text-align: right !important; }
+.text-center { text-align: center !important; }
+.border-none { border: none !important; padding: 0 !important; margin-bottom: 20px !important; }
+.form-label { font-weight: 600; margin-bottom: 8px; color: #475569; font-size: 0.95rem; display: block; }
+
+/* =========================================================
+   📂 BARIS HEADER KELOMPOK (TRANSACTION GROUP HEADERS)
+========================================================= */
+/* Gaya khusus baris pembatas saat riwayat dikelompokkan */
+.group-header-row {
+    background-color: #f8fafc !important;
+    cursor: default !important;
+}
+
+.group-header-row td {
+    text-align: left !important;
+    font-weight: 800 !important;
+    font-size: 0.9rem !important;
+    letter-spacing: 0.75px !important;
+    padding: 16px 20px !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    text-transform: uppercase !important;
+}
+
+.group-header-income td {
+    background: linear-gradient(90deg, #ecfdf5 0%, #ffffff 100%) !important;
+    color: #047857 !important;
+}
+
+.group-header-expense td {
+    background: linear-gradient(90deg, #fef2f2 0%, #ffffff 100%) !important;
+    color: #b91c1c !important;
+}
+
+.group-header-row:hover {
+    background-color: transparent !important;
+}
+
+/* 📱 RESPONSIF — LAYAR KECIL */
+@media (max-width: 768px) {
+    .table-header-modern {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .table-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-group input {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   📊 STYLE TAMBAHAN: INTEGRASI KEUANGAN DENGAN PRODUKSI
+   ========================================================= */
+
+/* Container segmented toggle */
+.mode-toggle-container {
+    display: flex;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 12px;
+    gap: 4px;
+    margin-top: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+.mode-btn.active {
+    background: white;
+    color: #10b981; /* Aksen hijau agar serasi dengan halaman keuangan */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.mode-btn:hover:not(.active) {
+    background: rgba(226, 232, 240, 0.5);
+    color: #334155;
+}
+
+/* Kartu Ringkasan Hasil Produksi Mingguan */
+.weekly-summary-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.06);
+    border-top: 4px solid #10b981;
+}
+
+.summary-card-header {
+    font-weight: 700;
+    color: #065f46;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Periode Widget */
+.summary-periode-widget {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.summary-periode-widget .widget-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-periode-widget .widget-val {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+/* Grid mini widgets */
+.summary-widgets-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.mini-widget {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.mini-widget:hover {
+    transform: translateY(-2px);
+}
+
+.widget-baik {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #a7f3d0;
+}
+
+.widget-baik .widget-val {
+    color: #15803d;
+}
+
+.widget-cacat {
+    background: linear-gradient(135deg, #fdf2f2 0%, #fee2e2 100%);
+    border: 1px solid #fecaca;
+}
+
+.widget-cacat .widget-val {
+    color: #b91c1c;
+}
+
+.widget-total {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+    border: 1px solid #bfdbfe !important;
+    margin-top: 2px;
+}
+
+.widget-total .widget-val {
+    color: #1e40af;
+}
+
+.widget-icon {
+    font-size: 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+.widget-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+}
+
+.widget-info .widget-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.widget-info .widget-val {
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+/* Sub-badge ketertelusuran di bawah Deskripsi Transaksi */
+.sub-badge-produksi {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #f1f5f9;
+    color: #475569;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+    border: 1px solid #cbd5e1;
+    letter-spacing: 0.2px;
+}
+
+/* Sub-badge ketertelusuran untuk transaksi manual/umum yang dihubungkan ke batch */
+.sub-badge-manual {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #eff6ff;
+    color: #1e40af;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+    border: 1px solid #bfdbfe;
+    letter-spacing: 0.2px;
+    transition: all 0.3s ease;
+}
+
+.sub-badge-manual:hover {
+    background-color: #dbeafe;
+    border-color: #93c5fd;
+}
+
+.desc-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}

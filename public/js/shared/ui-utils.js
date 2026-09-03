@@ -65,6 +65,21 @@ window.formatRibuan = function(angka) {
     return Math.round(angka).toLocaleString('id-ID');
 };
 
+/**
+ * Memformat input teks secara langsung saat mengetik (oninput) 
+ * agar memiliki pemisah ribuan otomatis (hanya angka).
+ * @param {HTMLInputElement} input - Elemen input
+ */
+window.formatNumberInput = function(input) {
+    if (!input) return;
+    let value = input.value.replace(/[^0-9]/g, '');
+    if (value === '') {
+        input.value = '';
+        return;
+    }
+    input.value = parseInt(value, 10).toLocaleString('id-ID');
+};
+
 // =========================================
 // 2. FUNGSI NOTIFIKASI & KOMPONEN UI
 // =========================================

@@ -1,12 +1,258 @@
-<!-- =========================================================
-     SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
-     File: resources/views/keuangan.blade.php
-     Deskripsi: Halaman Keuangan - LIBAS
-========================================================= -->
 @extends('layouts.layout')
 
 @section('title', 'Keuangan')
 
 @section('content')
-<!-- Halaman Kosong -->
+<!-- Mengimpor animasi (Animate.css) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<!-- File CSS untuk desain halaman keuangan -->
+<link rel="stylesheet" href="{{ asset('css/keuangan/keuangan.css') }}" />
+
+<!-- Header khusus untuk tampilan Mobile (layar kecil) -->
+<header class="mobile-header">
+    <div class="mobile-logo">🐔 LIBAS</div>
+    <!-- Tombol hamburger dipindahkan ke event listener JS -->
+    <button class="menu-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+        ☰
+    </button>
+</header>
+
+<!-- HEADER HALAMAN: Menampilkan Judul Modul dan Deskripsi Fungsi -->
+<header class="page-header animate__animated animate__fadeInDown">
+    <div class="header-text">
+        <h2>📑 Manajemen Data Keuangan</h2>
+        <p>Input dan kelola catatan pemasukan serta pengeluaran peternakan Anda.</p>
+    </div>
+</header>
+
+<!-- AREA KEUANGAN: Baris kontainer yang terbagi menjadi bagian Form (Kiri) dan Daftar Data (Kanan) -->
+<div class="finance-container animate__animated animate__fadeInUp">
+    <!-- BAGIAN KIRI: Formulir Input Transaksi Baru -->
+    <section class="finance-form-card shadow-card">
+        <div class="form-header">
+                <h3 id="formTitle">➕ Tambah Transaksi</h3>
+        </div>
+
+        <!-- Form ID untuk event listener di JS -->
+        <form id="financeForm">
+                <input type="hidden" id="trxId" />
+
+                <!-- ===== SUMBER PENCATATAN ===== -->
+                <div class="form-group" id="trxSourceGroup">
+                    <label>Sumber Pencatatan</label>
+                    <div class="mode-toggle-container">
+                            <button type="button" id="btnSourceManual" class="mode-btn active" onclick="switchTrxSource('manual')">✍️ Manual / Umum</button>
+                            <button type="button" id="btnSourceProduksi" class="mode-btn" onclick="switchTrxSource('produksi')">🥚 Hasil Produksi</button>
+                    </div>
+                    <input type="hidden" id="trxSource" value="manual" />
+                </div>
+
+                <!-- 1. Input Tanggal Transaksi -->
+                <div class="form-group">
+                    <label for="trxDate">Tanggal Transaksi</label>
+                    <input type="date" id="trxDate" required />
+                </div>
+
+                <!-- 2. Pilihan Jenis (Pemasukan atau Pengeluaran) -->
+                <fieldset class="form-group border-none" id="trxTypeGroup">
+                    <legend class="form-label">Jenis Transaksi</legend>
+                    <div class="radio-group">
+                            <label class="radio-label" id="labelTypePemasukan">
+                                <input type="radio" name="trxType" id="typePemasukan" value="pemasukan" checked required />
+                                <span>Pemasukan</span>
+                            </label>
+                            <label class="radio-label" id="labelTypePengeluaran">
+                                <input type="radio" name="trxType" id="typePengeluaran" value="pengeluaran" required />
+                                <span>Pengeluaran</span>
+                            </label>
+                    </div>
+                </fieldset>
+
+                <!-- ===== FIELD BATCH (Tampil untuk semua, opsional untuk manual, wajib untuk produksi) ===== -->
+                <div class="form-group" id="batchFormGroup">
+                    <label for="trxBatch" id="lblTrxBatch">Target Batch Ayam <small style="font-weight: normal; color: #64748b;">(Opsional)</small></label>
+                    <select id="trxBatch" onchange="loadBatchWeeks()">
+                            <option value="" selected>— Pilih Batch Target (Opsional) —</option>
+                            <!-- Diisi via JavaScript -->
+                    </select>
+                </div>
+
+                <!-- ===== FIELD KHUSUS SUMBER PRODUKSI (Tampil jika memilih Hasil Produksi) ===== -->
+                <div id="produksiSourceFields" style="display: none;">
+                    <div class="form-group">
+                            <label for="trxWeek">Minggu Produksi</label>
+                            <select id="trxWeek" disabled onchange="showWeekProductionSummary()">
+                                <option value="" disabled selected>— pilih batch dahulu —</option>
+                                <!-- Diisi via JavaScript -->
+                            </select>
+                    </div>
+
+                    <!-- Kartu Ringkasan Hasil Produksi Mingguan -->
+                    <div id="weeklyProductionSummary" class="weekly-summary-card animate__animated animate__fadeIn" style="display: none;">
+                            <div class="summary-card-header">
+                                <span>📊 Ringkasan Produksi Minggu Ini</span>
+                            </div>
+
+                            <!-- Widget Periode -->
+                            <div class="summary-periode-widget">
+                                <span class="widget-label">📅 Periode Produksi</span>
+                                <strong id="summaryPeriode" class="widget-val">-</strong>
+                            </div>
+
+                            <!-- Grid Mini Widgets -->
+                            <div class="summary-widgets-grid">
+                                <!-- Widget 1: Telur Baik -->
+                                <div class="mini-widget widget-baik">
+                                        <span class="widget-icon">🥚</span>
+                                        <div class="widget-info">
+                                            <span class="widget-label">Telur Baik</span>
+                                            <strong id="summaryBaik" class="widget-val">0 Butir</strong>
+                                        </div>
+                                </div>
+
+                                <!-- Widget 2: Telur Cacat -->
+                                <div class="mini-widget widget-cacat">
+                                        <span class="widget-icon">🍳</span>
+                                        <div class="widget-info">
+                                            <span class="widget-label">Telur Cacat</span>
+                                            <strong id="summaryCacat" class="widget-val">0 Butir</strong>
+                                        </div>
+                                </div>
+
+                                <!-- Widget 3: Total Telur -->
+                                <div class="mini-widget widget-total">
+                                        <span class="widget-icon">📦</span>
+                                        <div class="widget-info">
+                                            <span class="widget-label">Total Telur</span>
+                                            <strong id="summaryTotal" class="widget-val">0 Butir</strong>
+                                        </div>
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="form-group">
+                            <label for="eggPrice">Harga Jual per Papan (Rp)</label>
+                            <input type="text" id="eggPrice" inputmode="numeric" oninput="window.formatNumberInput(this); calculateEggSalesAmount();" placeholder="Contoh: 50.000" />
+                            <small class="hint-text">💡 Jumlah Uang akan terhitung otomatis: (Telur Baik / 30) × Harga per Papan</small>
+                    </div>
+                </div>
+
+                <!-- 3. Input Keterangan atau Catatan Singkat -->
+                <div class="form-group">
+                    <label for="trxDesc">Keterangan / Deskripsi</label>
+                    <input type="text" id="trxDesc" placeholder="Contoh: Penjualan 50 Papan Telur" required />
+                </div>
+
+                <!-- 4. Input Jumlah Nominal Mata Uang Rupiah -->
+                <div class="form-group">
+                    <label for="trxAmount">Jumlah Uang (Rp)</label>
+                    <input type="text" id="trxAmount" inputmode="numeric" oninput="window.formatNumberInput(this); window.calculateEggPriceFromAmount();" placeholder="Contoh: 1.500.000" required />
+                </div>
+
+                <!-- 5. Kumpulan Tombol -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="btnSubmit">
+                            <span class="btn-text">💾 Simpan Data</span>
+                            <span class="loader" id="formLoader"></span>
+                    </button>
+                    <button type="reset" class="btn-secondary" id="btnReset">
+                            Kosongkan
+                    </button>
+                </div>
+        </form>
+    </section>
+
+    <!-- BAGIAN KANAN: Menampilkan Nominal Ringkasan dan Daftar Tabel Transaksi -->
+    <section class="finance-data-card shadow-card">
+        <!-- 1. Kartu Rangkuman Angka Keseluruhan -->
+        <div class="finance-summary-cards">
+                <div class="summary-box box-income">
+                    <h4>Total Pemasukan</h4>
+                    <p id="totalPemasukan">Rp 0</p>
+                </div>
+                <div class="summary-box box-expense">
+                    <h4>Total Pengeluaran</h4>
+                    <p id="totalPengeluaran">Rp 0</p>
+                </div>
+                <div class="summary-box box-balance">
+                    <h4>Saldo Bersih</h4>
+                    <p id="totalSaldo">Rp 0</p>
+                </div>
+        </div>
+
+        <!-- 2. Filter & Pencarian Cepat -->
+        <div class="table-header-modern">
+                <div class="table-title">
+                    <h3>📋 Riwayat Transaksi</h3>
+                </div>
+                <div class="table-filters">
+                    <!-- Filter Tampilan -->
+                    <div class="filter-group">
+                            <label for="viewMode" style="font-weight: 700; color: #475569; font-size: 0.9rem; margin-right: 5px;">Tampilan:</label>
+                            <select id="viewMode" title="Pilih Tampilan" style="border: none; background: transparent; font-family: inherit; font-size: 0.9rem; font-weight: 600; color: #475569; cursor: pointer; outline: none;">
+                                <option value="riwayat-keseluruhan" selected>📅 Riwayat Keseluruhan</option>
+                                <option value="tipe">📂 Kelompokkan per Tipe</option>
+                            </select>
+                    </div>
+                    <!-- Filter Batch -->
+                    <div class="filter-group">
+                            <label for="filterBatch" style="font-weight: 700; color: #475569; font-size: 0.9rem; margin-right: 5px;">Filter Batch:</label>
+                            <select id="filterBatch" title="Pilih Batch" style="border: none; background: transparent; font-family: inherit; font-size: 0.9rem; font-weight: 600; color: #475569; cursor: pointer; outline: none;">
+                                <option value="" selected>🔄 Semua Batch</option>
+                                <!-- Diisi via JavaScript -->
+                            </select>
+                    </div>
+                    <!-- Filter Rentang Tanggal -->
+                    <div class="filter-group">
+                            <label for="filterStartDate" style="font-weight: 700; color: #475569; font-size: 0.9rem; margin-right: 5px;">Filter Tanggal:</label>
+                            <input type="date" id="filterStartDate" title="Pilih Tanggal" />
+                    </div>
+                    <!-- Pencarian Teks -->
+                    <div class="search-group">
+                            <input type="text" id="searchTrx" placeholder="Cari keterangan..." />
+                            <button class="btn-export" id="btnExport" title="Unduh Laporan Keuangan">
+                                📥 Ekspor CSV
+                            </button>
+                    </div>
+                </div>
+        </div>
+
+        <!-- 3. Tabel Daftar Riwayat Keuangan -->
+        <div class="table-responsive">
+                <!-- Loading Overlay untuk Tabel -->
+                <div id="tableLoading" class="table-loader-container">
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                </div>
+
+                <table id="financeTable" class="data-table">
+                    <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Jenis</th>
+                                <th>Keterangan</th>
+                                <th class="text-right">Jumlah (Rp)</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                    </thead>
+                    <tbody id="financeTableBody">
+                            <!-- Data dipopulasi oleh JS -->
+                    </tbody>
+                </table>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="empty-state-modern">
+                    <span class="empty-icon">💸</span>
+                    <p>Belum ada catatan transaksi untuk periode ini.</p>
+                </div>
+        </div>
+    </section>
+</div>
 @endsection
+
+@push('scripts')
+<script type="module" src="{{ asset('js/keuangan/keuangan.js') }}"></script>
+<script type="module" src="{{ asset('js/firebase.component/auth-state.js') }}"></script>
+@endpush
