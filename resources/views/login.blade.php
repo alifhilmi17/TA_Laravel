@@ -155,6 +155,17 @@
   <!-- JS Interaktif Flip Card & Utilities -->
   <script src="{{ asset('js/login/login-interactive.js') }}"></script>
   <script src="{{ asset('js/shared/ui-utils.js') }}"></script>
+  
+  @if(session()->has('firebase_logout'))
+  <script type="module">
+    import { signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    import { auth } from "{{ asset('js/firebase.component/firebase-init.js') }}";
+    
+    signOut(auth).then(() => {
+        console.log("Firebase Auth synced logout successfully.");
+    }).catch((err) => console.error(err));
+  </script>
+  @endif
 </body>
 
 </html>

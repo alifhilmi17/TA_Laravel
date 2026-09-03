@@ -8,8 +8,7 @@
    menggunakan Local Storage (versi Firebase di-comment).
 ========================================================= */
 
-// --- KODE FIREBASE (DI-COMMENT) ---
-/*
+// --- KODE FIREBASE ---
 import { 
     collection, 
     addDoc, 
@@ -22,7 +21,6 @@ import {
     orderBy 
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 import { db } from "../firebase.component/firebase-init.js";
-*/
 
 // =========================================
 // 1. DEKLARASI STATE (DATA AWAL)
@@ -30,14 +28,12 @@ import { db } from "../firebase.component/firebase-init.js";
 let dataAyam = [];
 let dataKesehatan = [];
 
-// --- KODE FIREBASE (DI-COMMENT) ---
-/*
+// --- KODE FIREBASE ---
 const ayamCollection = collection(db, "populasi_ayam");
 const kesehatanCollection = collection(db, "kesehatan_ayam");
 
 let unsubscribeAyam = null;
 let unsubscribeKesehatan = null;
-*/
 
 // =========================================
 // 2. MODUL UTILITAS
@@ -57,8 +53,7 @@ let unsubscribeKesehatan = null;
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
-    // --- KODE FIREBASE (DI-COMMENT) ---
-    /*
+    // --- KODE FIREBASE ---
     unsubscribeAyam = onSnapshot(query(ayamCollection, orderBy("tglMasuk", "desc")), (snapshot) => {
         dataAyam = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         renderTable();
@@ -74,9 +69,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }, (error) => {
         console.error("Firestore Error (Kesehatan): ", error);
     });
-    */
     
-    // VERSI LOCAL STORAGE
+    // VERSI LOCAL STORAGE (DI-COMMENT)
+    /*
     const localDataAyam = localStorage.getItem("populasi_ayam");
     if (localDataAyam) {
         dataAyam = JSON.parse(localDataAyam);
@@ -91,6 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     renderTable();
     updateQuickStats();
+    */
 });
 
 /**
@@ -279,12 +275,14 @@ window.saveAyamData = async function(event) {
             payload.customId = customId;
             payload.createdAt = new Date().toISOString();
             
-            // --- KODE FIREBASE (DI-COMMENT) ---
-            /* await addDoc(ayamCollection, payload); */
+            // --- KODE FIREBASE ---
+            await addDoc(ayamCollection, payload);
             
-            // VERSI LOCAL STORAGE
+            // VERSI LOCAL STORAGE (DI-COMMENT)
+            /*
             payload.id = 'L-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5); // Generate unique ID
             dataAyam.push(payload);
+            */
             
             Swal.fire({
                 icon: 'success',
@@ -295,17 +293,17 @@ window.saveAyamData = async function(event) {
             });
         } else {
             // LOGIKA MODE EDIT/UPDATE DATA LAMA
-            // --- KODE FIREBASE (DI-COMMENT) ---
-            /*
+            // --- KODE FIREBASE ---
             const docRef = doc(db, "populasi_ayam", docId);
             await updateDoc(docRef, payload); // Perbarui dokumen di Firestore
-            */
             
-            // VERSI LOCAL STORAGE
+            // VERSI LOCAL STORAGE (DI-COMMENT)
+            /*
             const index = dataAyam.findIndex(a => a.id === docId);
             if (index !== -1) {
                 dataAyam[index] = { ...dataAyam[index], ...payload };
             }
+            */
             
             Swal.fire({
                 icon: 'success',
@@ -316,13 +314,15 @@ window.saveAyamData = async function(event) {
             });
         }
         
-        // Simpan ke local storage
+        // Simpan ke local storage (DI-COMMENT)
+        /*
         localStorage.setItem("populasi_ayam", JSON.stringify(dataAyam));
         
         // Sorting dan Update UI
         dataAyam.sort((a, b) => new Date(b.tglMasuk) - new Date(a.tglMasuk));
         renderTable();
         updateQuickStats();
+        */
         
         window.closeAyamModal(); // Tutup modal setelah sukses
     } catch (error) {
@@ -377,8 +377,7 @@ window.deleteAyam = function(id) {
                     didOpen: () => { Swal.showLoading(); }
                 });
 
-                // --- KODE FIREBASE (DI-COMMENT) ---
-                /*
+                // --- KODE FIREBASE ---
                 // 1. Hapus semua data kesehatan terkait
                 const kesSnapshot = await getDocs(collection(db, "kesehatan_ayam"));
                 const kesPromises = [];
@@ -398,9 +397,9 @@ window.deleteAyam = function(id) {
 
                 // 3. Hapus data batch utama
                 await deleteDoc(doc(db, "populasi_ayam", id)); // Hapus dari Firestore
-                */
 
-                // VERSI LOCAL STORAGE
+                // VERSI LOCAL STORAGE (DI-COMMENT)
+                /*
                 // Hapus kesehatan
                 let localDataKes = localStorage.getItem("kesehatan_ayam");
                 if (localDataKes) {
@@ -424,6 +423,7 @@ window.deleteAyam = function(id) {
                 
                 renderTable();
                 updateQuickStats();
+                */
 
                 Swal.fire('Terhapus!', 'Data batch beserta riwayatnya telah dihapus.', 'success');
             } catch (error) {

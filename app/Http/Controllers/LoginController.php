@@ -47,11 +47,16 @@ class LoginController extends Controller
             $factory = (new \Kreait\Firebase\Factory)->withServiceAccount(base_path(env('FIREBASE_CREDENTIALS')));
             $auth = $factory->createAuth();
 
-            $auth->signInWithEmailAndPassword($user->email, $credentials['password']);
+            $signInResult = $auth->signInWithEmailAndPassword($user->email, $credentials['password']);
 
             // Jika Firebase berhasil, buat sesi login lokal di Laravel
             Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
+
+            // Generate Custom Token untuk Frontend
+            $firebaseUid = $signInResult->firebaseUserId();
+            $customToken = $auth->createCustomToken($firebaseUid)->toString();
+            $request->session()->flash('firebase_custom_token', $customToken);
 
             $roleName = $request->input('role') === 'admin' ? 'Admin' : 'Petugas';
             return redirect()->intended('/dashboard')->with('success', 'Berhasil masuk sebagai ' . $roleName . ' (' . $user->name . ')!');
@@ -76,6 +81,9 @@ class LoginController extends Controller
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        // Flash perintah ke frontend agar Firebase SDK ikut logout
+        $request->session()->flash('firebase_logout', true);
 
         return redirect()->route('login')->with('success', 'Anda telah berhasil keluar.');
     }
