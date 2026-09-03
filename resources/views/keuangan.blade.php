@@ -8,5 +8,5 @@
 @section('title', 'Keuangan')
 
 @section('content')
-    <!-- Halaman Kosong -->
+<!-- Halaman Kosong -->
 @endsection
