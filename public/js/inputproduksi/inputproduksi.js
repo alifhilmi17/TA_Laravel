@@ -5,8 +5,6 @@
    menggunakan Google Firebase Firestore.
 ========================================================= */
 
-// [FIRESTORE CODE DISABLED]
-/*
 import { 
     collection, 
     addDoc, 
@@ -19,7 +17,6 @@ import {
     orderBy 
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 import { db } from "../firebase.component/firebase-init.js";
-*/
 
 // State Global
 let dataProduksi = [];
@@ -28,14 +25,11 @@ let dataPakan = [];
 let collapsedBatches = new Set(); 
 let collapsedWeeks = new Set();
 
-// [FIRESTORE CODE DISABLED]
-/*
 const produksiCollection = collection(db, "produksi_harian");
 const ayamCollection = collection(db, "populasi_ayam");
 const pakanCollection = collection(db, "stok_pakan");
 
 let unsubscribeAyam = null;
-*/
 
 // =========================================
 // 1. UTILITAS & FORMATTING
@@ -55,21 +49,13 @@ window.getLocalDateString = function() {
 
 async function loadProduksiData() {
     try {
-        // [FIRESTORE CODE DISABLED]
-        /*
         const q = query(produksiCollection, orderBy("tanggal", "desc"));
         const snapshot = await getDocs(q);
         dataProduksi = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        */
-        
-        // [LOCAL STORAGE CODE ADDED]
-        const localData = JSON.parse(localStorage.getItem('produksi_harian') || '[]');
-        // Sort descending by tanggal
-        dataProduksi = localData.sort((a, b) => b.tanggal.localeCompare(a.tanggal));
         
         renderTable();
     } catch (error) {
-        console.error("Local Storage Error (Produksi): ", error);
+        console.error("Firestore Error (Produksi): ", error);
         Swal.fire("Error", "Gagal memuat data produksi: " + error.message, "error");
     }
 }
@@ -79,55 +65,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadProduksiData();
 
     // 2. Data Ayam (Batch)
-    // [FIRESTORE CODE DISABLED]
-    /*
     unsubscribeAyam = onSnapshot(ayamCollection, (snapshot) => {
         dataAyam = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        ...
-    });
-    */
-    
-    // [LOCAL STORAGE CODE ADDED]
-    dataAyam = JSON.parse(localStorage.getItem('populasi_ayam') || '[]');
-    if (dataAyam.length === 0) {
-        dataAyam = [
-            { id: "batch-1", customId: "B-001", jenis: "Petelur Coklat", kandang: "Kandang A", status: "Aktif", sisaAyam: 1000 },
-            { id: "batch-2", customId: "B-002", jenis: "Petelur Putih", kandang: "Kandang B", status: "Aktif", sisaAyam: 800 }
-        ];
-        localStorage.setItem('populasi_ayam', JSON.stringify(dataAyam));
-    }
-    
-    const modal = document.getElementById('produksiModal');
-    if (modal && modal.classList.contains('show')) {
-        const currentSelected = document.getElementById('batchProduksi').value;
-        loadBatchOptions(currentSelected);
-        if (currentSelected) {
-            const batch = dataAyam.find(a => a.id === currentSelected);
-            if (batch) {
-                document.getElementById('totalAyamInput').value = batch.sisaAyam || 0;
+        
+        const modal = document.getElementById('produksiModal');
+        if (modal && modal.classList.contains('show')) {
+            const currentSelected = document.getElementById('batchProduksi').value;
+            loadBatchOptions(currentSelected);
+            if (currentSelected) {
+                const batch = dataAyam.find(a => a.id === currentSelected);
+                if (batch) {
+                    document.getElementById('totalAyamInput').value = batch.sisaAyam || 0;
+                }
             }
         }
-    }
-    updateQuickStats();
+        updateQuickStats();
+    });
 
     // 3. Data Pakan
-    // [FIRESTORE CODE DISABLED]
-    /*
     onSnapshot(pakanCollection, (snapshot) => {
         dataPakan = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         loadPakanOptions();
     });
-    */
-    
-    // [LOCAL STORAGE CODE ADDED]
-    dataPakan = JSON.parse(localStorage.getItem('stok_pakan') || '[]');
-    if (dataPakan.length === 0) {
-        dataPakan = [
-            { id: "pakan-1", tipe: "Masuk", jenis: "Pakan Layer Dewasa", jumlah: 500 }
-        ];
-        localStorage.setItem('stok_pakan', JSON.stringify(dataPakan));
-    }
-    loadPakanOptions();
 });
 
 function loadPakanOptions() {
@@ -789,10 +748,7 @@ window.saveProduksiData = async function(event) {
                 payload.createdAt = new Date().toISOString();
                 payload.id = "PROD-" + Date.now();
                 
-                // [FIRESTORE CODE DISABLED]
-                // await addDoc(produksiCollection, payload);
-                dataProduksi.push(payload);
-                localStorage.setItem('produksi_harian', JSON.stringify(dataProduksi));
+                await addDoc(produksiCollection, payload);
 
                 // Integrasi otomatis pemakaian pakan (stok pakan keluar) jika diisi
                 if (pakanJenis && pakanJumlah > 0) {
@@ -810,10 +766,7 @@ window.saveProduksiData = async function(event) {
                         createdAt: new Date().toISOString(),
                         updatedAt: new Date().toISOString()
                     };
-                    // [FIRESTORE CODE DISABLED]
-                    // await addDoc(pakanCollection, pakanPayload);
-                    dataPakan.push(pakanPayload);
-                    localStorage.setItem('stok_pakan', JSON.stringify(dataPakan));
+                    await addDoc(pakanCollection, pakanPayload);
                 }
 
                 // Integrasi otomatis kematian ke kesehatan & populasi ayam
@@ -827,42 +780,23 @@ window.saveProduksiData = async function(event) {
                         jmlSakit: 0,
                         jmlMati: ayamMati,
                         gejala: "Pemeriksaan rutin saat panen telur harian",
-                        penanganan: "Bangkai dievakuasi and dikubur",
+                        penanganan: "Bangkai dievakuasi dan dikubur",
                         status: "Mati",
                         createdAt: new Date().toISOString(),
                         updatedAt: new Date().toISOString()
                     };
                     
-                    // [FIRESTORE CODE DISABLED]
-                    // const kesehatanCollection = collection(db, "kesehatan_ayam");
-                    // await addDoc(kesehatanCollection, kesPayload);
-                    
-                    let dataKesehatan = JSON.parse(localStorage.getItem('kesehatan_ayam') || '[]');
-                    dataKesehatan.push(kesPayload);
-                    localStorage.setItem('kesehatan_ayam', JSON.stringify(dataKesehatan));
+                    const kesehatanCollection = collection(db, "kesehatan_ayam");
+                    await addDoc(kesehatanCollection, kesPayload);
 
                     const sisaSekarang = Math.max(0, totalAyam - ayamMati);
-                    // [FIRESTORE CODE DISABLED]
-                    // const batchRef = doc(db, "populasi_ayam", batchEl.value);
-                    // await updateDoc(batchRef, { sisaAyam: sisaSekarang, updatedAt: new Date().toISOString() });
-                    
-                    const batchIndex = dataAyam.findIndex(a => a.id === batchEl.value);
-                    if (batchIndex >= 0) {
-                        dataAyam[batchIndex].sisaAyam = sisaSekarang;
-                        localStorage.setItem('populasi_ayam', JSON.stringify(dataAyam));
-                    }
+                    const batchRef = doc(db, "populasi_ayam", batchEl.value);
+                    await updateDoc(batchRef, { sisaAyam: sisaSekarang, updatedAt: new Date().toISOString() });
                 }
 
                 Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Data produksi ditambahkan.', timer: 2000, showConfirmButton: false });
             } else {
-                // [FIRESTORE CODE DISABLED]
-                // await updateDoc(doc(db, "produksi_harian", idInput), payload);
-                const idx = dataProduksi.findIndex(p => p.id === idInput);
-                if (idx >= 0) {
-                    payload.id = idInput;
-                    dataProduksi[idx] = { ...dataProduksi[idx], ...payload };
-                    localStorage.setItem('produksi_harian', JSON.stringify(dataProduksi));
-                }
+                await updateDoc(doc(db, "produksi_harian", idInput), payload);
                 Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Data produksi diperbarui.', timer: 2000, showConfirmButton: false });
             }
             
@@ -976,23 +910,13 @@ window.saveProduksiData = async function(event) {
         });
 
         try {
-            // [FIRESTORE CODE DISABLED]
             // Jalankan penyimpanan bulk secara paralel
-            // const savePromises = payloads.map(payload => addDoc(produksiCollection, payload));
-            // await Promise.all(savePromises);
-            
-            payloads.forEach((payload, index) => {
-                payload.id = "PROD-" + Date.now() + "-" + index;
-                dataProduksi.push(payload);
-            });
-            localStorage.setItem('produksi_harian', JSON.stringify(dataProduksi));
+            const savePromises = payloads.map(payload => addDoc(produksiCollection, payload));
+            await Promise.all(savePromises);
 
             // Simpan log kematian untuk setiap hari yang memiliki kematian
-            // [FIRESTORE CODE DISABLED]
-            // const kesehatanCollection = collection(db, "kesehatan_ayam");
-            // const healthPromises = [];
-            
-            let dataKesehatan = JSON.parse(localStorage.getItem('kesehatan_ayam') || '[]');
+            const kesehatanCollection = collection(db, "kesehatan_ayam");
+            const healthPromises = [];
             
             payloads.forEach((p, index) => {
                 if (p.ayamMati > 0) {
@@ -1010,28 +934,17 @@ window.saveProduksiData = async function(event) {
                         createdAt: new Date().toISOString(),
                         updatedAt: new Date().toISOString()
                     };
-                    dataKesehatan.push(kesPayload);
-                    // [FIRESTORE CODE DISABLED]
-                    // healthPromises.push(addDoc(kesehatanCollection, kesPayload));
+                    healthPromises.push(addDoc(kesehatanCollection, kesPayload));
                 }
             });
             
-            // [FIRESTORE CODE DISABLED]
-            // if (healthPromises.length > 0) { await Promise.all(healthPromises); }
-            if (dataKesehatan.length > 0) {
-                localStorage.setItem('kesehatan_ayam', JSON.stringify(dataKesehatan));
+            if (healthPromises.length > 0) { 
+                await Promise.all(healthPromises); 
             }
 
             // Update sisaAyam terakhir di populasi_ayam
-            // [FIRESTORE CODE DISABLED]
-            // const batchRef = doc(db, "populasi_ayam", batchEl.value);
-            // await updateDoc(batchRef, { sisaAyam: runningPopulasi, updatedAt: new Date().toISOString() });
-            
-            const batchIndex = dataAyam.findIndex(a => a.id === batchEl.value);
-            if (batchIndex >= 0) {
-                dataAyam[batchIndex].sisaAyam = runningPopulasi;
-                localStorage.setItem('populasi_ayam', JSON.stringify(dataAyam));
-            }
+            const batchRef = doc(db, "populasi_ayam", batchEl.value);
+            await updateDoc(batchRef, { sisaAyam: runningPopulasi, updatedAt: new Date().toISOString() });
 
             Swal.fire({
                 icon: 'success',
@@ -1103,11 +1016,7 @@ window.deleteProduksi = function(id) {
         confirmButtonText: 'Ya, Hapus!'
     }).then(async (result) => {
         if (result.isConfirmed) {
-            // [FIRESTORE CODE DISABLED]
-            // await deleteDoc(doc(db, "produksi_harian", id));
-            
-            dataProduksi = dataProduksi.filter(p => p.id !== id);
-            localStorage.setItem('produksi_harian', JSON.stringify(dataProduksi));
+            await deleteDoc(doc(db, "produksi_harian", id));
             
             Swal.fire('Terhapus!', 'Data telah dihapus.', 'success');
             
@@ -1150,14 +1059,9 @@ window.deleteMinggu = function(batchId, minggu) {
                     }
                 });
 
-                // [FIRESTORE CODE DISABLED]
                 // Hapus semua dokumen secara paralel menggunakan Promise.all
-                // const deletePromises = docsToDelete.map(p => deleteDoc(doc(db, "produksi_harian", p.id)));
-                // await Promise.all(deletePromises);
-                
-                const idsToDelete = docsToDelete.map(p => p.id);
-                dataProduksi = dataProduksi.filter(p => !idsToDelete.includes(p.id));
-                localStorage.setItem('produksi_harian', JSON.stringify(dataProduksi));
+                const deletePromises = docsToDelete.map(p => deleteDoc(doc(db, "produksi_harian", p.id)));
+                await Promise.all(deletePromises);
 
                 Swal.fire({
                     icon: 'success',
