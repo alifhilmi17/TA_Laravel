@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SignupController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataAyamController;
 use App\Http\Controllers\InputProduksiController;
@@ -20,6 +21,8 @@ use App\Http\Controllers\ProfileController;
 Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.perform');
+Route::get('/signup', [SignupController::class, 'index'])->name('signup');
+Route::post('/signup', [SignupController::class, 'store'])->name('signup.perform');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // =========================================================
@@ -27,7 +30,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // =========================================================
 Route::middleware([])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Rute Petugas
     Route::get('/data-ayam', [DataAyamController::class, 'index'])->name('petugas.data-ayam');
     Route::get('/input-produksi', [InputProduksiController::class, 'index'])->name('petugas.input-produksi');

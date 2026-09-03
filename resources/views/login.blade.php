@@ -104,7 +104,7 @@
               <label for="username">Username Akses</label>
               <input type="text" id="username" name="username" value="{{ old('username') }}" placeholder="Masukkan username Anda" autocomplete="off" required autofocus>
               @error('username')
-                <span style="color: #ff7e5f; font-size: 12px; margin-top: 4px; display: block;">{{ $message }}</span>
+              <span style="color: #ff7e5f; font-size: 12px; margin-top: 4px; display: block;">{{ $message }}</span>
               @enderror
             </div>
 
@@ -120,7 +120,7 @@
                 </span>
               </div>
               @error('password')
-                <span style="color: #ff7e5f; font-size: 12px; margin-top: 4px; display: block;">{{ $message }}</span>
+              <span style="color: #ff7e5f; font-size: 12px; margin-top: 4px; display: block;">{{ $message }}</span>
               @enderror
             </div>
 
@@ -132,7 +132,7 @@
           </form>
 
           <div class="extra-links" id="signupLinkContainer">
-            <p>Belum sempat mendaftarkan diri? <a href="#">Daftar Akun Baru</a></p>
+            <p>Belum sempat mendaftarkan diri? <a href="{{ route('signup') }}">Daftar Akun Baru</a></p>
           </div>
         </div>
 
@@ -142,14 +142,14 @@
 
   <!-- Notification Error Handler via SweetAlert2 -->
   @if(session('error'))
-    <script>
-      Swal.fire({
-        icon: 'error',
-        title: 'Gagal Masuk',
-        text: "{{ session('error') }}",
-        confirmButtonColor: '#ff7e5f'
-      });
-    </script>
+  <script>
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal Masuk',
+      text: "{{ session('error') }}",
+      confirmButtonColor: '#ff7e5f'
+    });
+  </script>
   @endif
 
   <!-- JS Interaktif Flip Card & Utilities -->

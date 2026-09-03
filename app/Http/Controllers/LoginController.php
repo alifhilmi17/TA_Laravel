@@ -32,28 +32,39 @@ class LoginController extends Controller
             'password.required' => 'Kata sandi wajib diisi.',
         ]);
 
-        // 2. Coba Autentikasi Menggunakan Facade Auth Laravel
-        if (Auth::attempt(['email' => $credentials['username'], 'password' => $credentials['password']], $request->boolean('remember')) ||
-            Auth::attempt(['name' => $credentials['username'], 'password' => $credentials['password']], $request->boolean('remember'))) {
-            $request->session()->regenerate();
-            return redirect()->intended('/dashboard')->with('success', 'Selamat datang kembali!');
+        // 2. Cari User di Database Lokal (Berdasarkan Username atau Email)
+        $loginInput = $credentials['username'];
+        $user = User::where('name', $loginInput)->orWhere('email', $loginInput)->first();
+
+        if (!$user) {
+            return back()->withErrors([
+                'username' => 'Kredensial yang diberikan tidak cocok dengan data kami.',
+            ])->onlyInput('username', 'role');
         }
 
-        // 3. Mode Testing / Auto-Create User jika data belum ada di database
-        $username = trim($credentials['username']);
-        $user = User::firstOrCreate(
-            ['email' => strtolower($username) . '@libas.test'],
-            [
-                'name' => ucfirst($username),
-                'password' => bcrypt($credentials['password']),
-            ]
-        );
+        // 3. Verifikasi Password melalui Firebase
+        try {
+            $factory = (new \Kreait\Firebase\Factory)->withServiceAccount(base_path(env('FIREBASE_CREDENTIALS')));
+            $auth = $factory->createAuth();
 
-        Auth::login($user, $request->boolean('remember'));
-        $request->session()->regenerate();
+            $auth->signInWithEmailAndPassword($user->email, $credentials['password']);
 
-        $roleName = $request->input('role') === 'admin' ? 'Admin' : 'Petugas';
-        return redirect()->intended('/dashboard')->with('success', 'Berhasil masuk sebagai ' . $roleName . ' (' . $user->name . ')!');
+            // Jika Firebase berhasil, buat sesi login lokal di Laravel
+            Auth::login($user, $request->boolean('remember'));
+            $request->session()->regenerate();
+
+            $roleName = $request->input('role') === 'admin' ? 'Admin' : 'Petugas';
+            return redirect()->intended('/dashboard')->with('success', 'Berhasil masuk sebagai ' . $roleName . ' (' . $user->name . ')!');
+            
+        } catch (\Kreait\Firebase\Exception\AuthException $e) {
+            return back()->withErrors([
+                'username' => 'Kredensial yang diberikan tidak cocok dengan data kami.',
+            ])->onlyInput('username', 'role');
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'username' => 'Gagal terhubung ke server Firebase: ' . $e->getMessage(),
+            ])->onlyInput('username', 'role');
+        }
     }
 
     /**
