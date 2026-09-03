@@ -51,7 +51,7 @@ async function loadProduksiData() {
     try {
         const q = query(produksiCollection, orderBy("tanggal", "desc"));
         const snapshot = await getDocs(q);
-        dataProduksi = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        dataProduksi = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         
         renderTable();
     } catch (error) {
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 2. Data Ayam (Batch)
     unsubscribeAyam = onSnapshot(ayamCollection, (snapshot) => {
-        dataAyam = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        dataAyam = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         
         const modal = document.getElementById('produksiModal');
         if (modal && modal.classList.contains('show')) {
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 3. Data Pakan
     onSnapshot(pakanCollection, (snapshot) => {
-        dataPakan = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        dataPakan = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         loadPakanOptions();
     });
 });
@@ -1016,12 +1016,22 @@ window.deleteProduksi = function(id) {
         confirmButtonText: 'Ya, Hapus!'
     }).then(async (result) => {
         if (result.isConfirmed) {
-            await deleteDoc(doc(db, "produksi_harian", id));
-            
-            Swal.fire('Terhapus!', 'Data telah dihapus.', 'success');
-            
-            // Refresh data setelah dihapus
-            loadProduksiData();
+            try {
+                Swal.fire({
+                    title: 'Menghapus data...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                await deleteDoc(doc(db, "produksi_harian", id));
+                
+                await loadProduksiData();
+                
+                Swal.fire('Terhapus!', 'Data telah dihapus.', 'success');
+            } catch (error) {
+                console.error("Error deleting document: ", error);
+                Swal.fire('Error', 'Gagal menghapus data: ' + error.message, 'error');
+            }
         }
     });
 };
