@@ -1,15 +1,42 @@
 /* =========================================================
-   SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
-   File: public/js/shared/ui-utils.js
-   Deskripsi: Kumpulan fungsi UI global & pemformat data
+   🐔 KODE SUMBER: UTILITAS ANTARMUKA & FORMAT DATA
+   File: ui-utils.js
+   ---------------------------------------------------------
+   Deskripsi singkat:
+   File ini berisi kumpulan fungsi global untuk manipulasi UI,
+   pemformatan tanggal, mata uang, dan notifikasi SweetAlert.
 ========================================================= */
 
+// =========================================
+// 1. FUNGSI PEMFORMATAN DATA
+// =========================================
+/**
+ * Memformat string tanggal (YYYY-MM-DD) menjadi format bahasa Indonesia (DD MMM YYYY).
+ * @param {string} tglString - String tanggal
+ * @returns {string} Tanggal yang diformat
+ */
 window.formatTanggal = function(tglString) {
     if (!tglString) return "-";
     const options = { day: 'numeric', month: 'short', year: 'numeric' };
     return new Date(tglString + 'T00:00:00').toLocaleDateString('id-ID', options);
 };
 
+/**
+ * Mendapatkan tanggal hari ini dalam format YYYY-MM-DD sesuai zona waktu lokal.
+ * Berguna untuk set default value pada input type="date".
+ * @returns {string} Tanggal dalam format YYYY-MM-DD
+ */
+window.getLocalDateString = function() {
+    const today = new Date();
+    const offset = today.getTimezoneOffset() * 60000;
+    return new Date(today.getTime() - offset).toISOString().split('T')[0];
+};
+
+/**
+ * Mencegah XSS dengan mengkonversi karakter khusus HTML menjadi entitas.
+ * @param {string} str - Teks input
+ * @returns {string} Teks yang sudah aman (escaped)
+ */
 window.escapeHTML = function(str) {
     if (!str) return '-';
     if (typeof str !== 'string') return str;
@@ -18,16 +45,36 @@ window.escapeHTML = function(str) {
     }[tag] || tag));
 };
 
+/**
+ * Memformat angka menjadi format mata uang Rupiah (Rp X.XXX.XXX).
+ * @param {number|string} angka - Nilai nominal uang
+ * @returns {string} Format Rupiah
+ */
 window.formatRupiah = function(angka) {
     if (angka === undefined || angka === null || isNaN(angka)) return 'Rp 0';
     return 'Rp ' + Math.round(angka).toLocaleString('id-ID');
 };
 
+/**
+ * Memformat angka dengan pemisah ribuan standar Indonesia (X.XXX).
+ * @param {number|string} angka - Nilai angka bulat/desimal
+ * @returns {string} Angka dengan pemisah ribuan
+ */
 window.formatRibuan = function(angka) {
     if (angka === undefined || angka === null || isNaN(angka)) return '0';
     return Math.round(angka).toLocaleString('id-ID');
 };
 
+// =========================================
+// 2. FUNGSI NOTIFIKASI & KOMPONEN UI
+// =========================================
+
+/**
+ * Menampilkan notifikasi popup ringan (Toast) menggunakan SweetAlert2.
+ * @param {string} title - Judul notifikasi
+ * @param {string} text - Pesan detail
+ * @param {string} icon - Tipe ikon ('success', 'error', 'info', dll)
+ */
 window.showToast = function(title, text, icon = 'success') {
     if (typeof Swal !== 'undefined') {
         Swal.fire({
@@ -45,6 +92,10 @@ window.showToast = function(title, text, icon = 'success') {
     }
 };
 
+/**
+ * Membuka atau menutup menu anak (submenu) pada Sidebar Navigasi.
+ * @param {string} menuId - ID elemen submenu yang dituju
+ */
 window.toggleSidebarMenu = function(menuId) {
     const menu = document.getElementById(menuId);
     if (menu) {

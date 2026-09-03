@@ -16,7 +16,7 @@
       </a>
 
       <!-- ===== FASE 2: SETUP POPULASI ===== -->
-      <button type="button" class="has-submenu {{ request()->is('data-ayam*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('ternakSubmenu')" aria-expanded="{{ request()->is('data-ayam*') ? 'true' : 'false' }}">
+      <button type="button" class="has-submenu {{ request()->is('data-ayam*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('ternakSubmenu');" aria-expanded="{{ request()->is('data-ayam*') ? 'true' : 'false' }}">
         🐣 Manajemen Populasi <span class="arrow">▸</span>
       </button>
       <div class="submenu {{ request()->is('data-ayam*') ? 'show' : '' }}" id="ternakSubmenu" aria-hidden="{{ request()->is('data-ayam*') ? 'false' : 'true' }}">
@@ -24,7 +24,7 @@
       </div>
 
       <!-- ===== FASE 3: RUTINITAS HARIAN ===== -->
-      <button type="button" class="has-submenu {{ request()->is('input-produksi*', 'kesehatan-ayam*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('harianSubmenu')" aria-expanded="{{ request()->is('input-produksi*', 'kesehatan-ayam*') ? 'true' : 'false' }}">
+      <button type="button" class="has-submenu {{ request()->is('input-produksi*', 'kesehatan-ayam*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('harianSubmenu');" aria-expanded="{{ request()->is('input-produksi*', 'kesehatan-ayam*') ? 'true' : 'false' }}">
         📋 Operasional Harian <span class="arrow">▸</span>
       </button>
       <div class="submenu {{ request()->is('input-produksi*', 'kesehatan-ayam*') ? 'show' : '' }}" id="harianSubmenu" aria-hidden="{{ request()->is('input-produksi*', 'kesehatan-ayam*') ? 'false' : 'true' }}">
@@ -33,7 +33,7 @@
       </div>
 
       <!-- ===== FASE 4: LOGISTIK & PERSEDIAAN ===== -->
-      <button type="button" class="has-submenu {{ request()->is('stok-pakan*', 'restock-reminder*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('persediaanSubmenu')" aria-expanded="{{ request()->is('stok-pakan*', 'restock-reminder*') ? 'true' : 'false' }}">
+      <button type="button" class="has-submenu {{ request()->is('stok-pakan*', 'restock-reminder*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('persediaanSubmenu');" aria-expanded="{{ request()->is('stok-pakan*', 'restock-reminder*') ? 'true' : 'false' }}">
         📦 Stok & Logistik <span class="arrow">▸</span>
       </button>
       <div class="submenu {{ request()->is('stok-pakan*', 'restock-reminder*') ? 'show' : '' }}" id="persediaanSubmenu" aria-hidden="{{ request()->is('stok-pakan*', 'restock-reminder*') ? 'false' : 'true' }}">
@@ -42,7 +42,7 @@
       </div>
 
       <!-- ===== FASE 5: KEUANGAN ===== -->
-      <button type="button" class="has-submenu {{ request()->is('keuangan*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('keuanganSubmenu')" aria-expanded="{{ request()->is('keuangan*') ? 'true' : 'false' }}">
+      <button type="button" class="has-submenu {{ request()->is('keuangan*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('keuanganSubmenu');" aria-expanded="{{ request()->is('keuangan*') ? 'true' : 'false' }}">
         💵 Pembukuan Finansial <span class="arrow">▸</span>
       </button>
       <div class="submenu {{ request()->is('keuangan*') ? 'show' : '' }}" id="keuanganSubmenu" aria-hidden="{{ request()->is('keuangan*') ? 'false' : 'true' }}">
@@ -50,7 +50,7 @@
       </div>
 
       <!-- ===== FASE 6: PREDIKSI & ANALISIS ===== -->
-      <button type="button" class="has-submenu {{ request()->is('prediksi-hasil*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('kelolaSubmenu')" aria-expanded="{{ request()->is('prediksi-hasil*') ? 'true' : 'false' }}">
+      <button type="button" class="has-submenu {{ request()->is('prediksi-hasil*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('kelolaSubmenu');" aria-expanded="{{ request()->is('prediksi-hasil*') ? 'true' : 'false' }}">
         🔮 Analisis Prediktif <span class="arrow">▸</span>
       </button>
       <div class="submenu {{ request()->is('prediksi-hasil*') ? 'show' : '' }}" id="kelolaSubmenu" aria-hidden="{{ request()->is('prediksi-hasil*') ? 'false' : 'true' }}">
@@ -58,7 +58,7 @@
       </div>
 
       <!-- ===== FASE 7: DOKUMEN & PELAPORAN ===== -->
-      <button type="button" class="has-submenu {{ request()->is('dokumen*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('dokumenSubmenu')" aria-expanded="{{ request()->is('dokumen*') ? 'true' : 'false' }}">
+      <button type="button" class="has-submenu {{ request()->is('dokumen*') ? 'active-parent' : '' }}" onclick="toggleSidebarMenu('dokumenSubmenu');" aria-expanded="{{ request()->is('dokumen*') ? 'true' : 'false' }}">
         📂 Pusat Dokumen <span class="arrow">▸</span>
       </button>
       <div class="submenu {{ request()->is('dokumen*') ? 'show' : '' }}" id="dokumenSubmenu" aria-hidden="{{ request()->is('dokumen*') ? 'false' : 'true' }}">
@@ -77,9 +77,11 @@
 
     <!-- ===== PROFIL PENGGUNA ===== -->
     <div class="sidebar-profile">
-      <img src="{{ asset('images/profilepicture.png') }}" alt="Foto Profil" class="profile-pic" onclick="window.location.href='{{ url('/edit-profile') }}'" />
+      <a href="{{ url('/edit-profile') }}">
+        <img src="{{ asset('images/profilepicture.png') }}" alt="Foto Profil" class="profile-pic" />
+      </a>
       <div class="profile-name-container">
-        <p class="profile-name">{{ Auth::user()->name ?? 'Peternak' }}</p>
+        <p class="profile-name">{{ Auth::user()?->name ?? 'Peternak' }}</p>
         <a href="{{ url('/edit-profile') }}" class="edit-profile-icon" title="Edit Profil">&#x270E;</a>
       </div>
 

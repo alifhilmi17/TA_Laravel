@@ -1,8 +1,10 @@
 /* =========================================================
-   SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
+   🐔 KODE SUMBER: LOGIKA OTENTIKASI & ANIMASI LOGIN
    File: login-interactive.js
-   Deskripsi: Script khusus yang memberikan efek interaktif 
-   serta animasi lucu pada halaman Login (Otentikasi).
+   ---------------------------------------------------------
+   Deskripsi singkat:
+   File ini menangani animasi UI halaman login sekaligus logika 
+   otentikasi Firebase (signInWithEmailAndPassword).
 ========================================================= */
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
@@ -296,7 +298,10 @@ function initializeLogin() {
     }
 }
 
-// Menjalankan inisialisasi dengan aman, menghindari bug DOMContentLoaded yang sudah terlewat
+// =========================================
+// 6. EKSEKUSI PROGRAM
+// =========================================
+// Menjalankan inisialisasi dengan aman untuk menghindari bug DOMContentLoaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeLogin);
 } else {

@@ -1,7 +1,10 @@
 <!-- =========================================================
-     SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
-     File: resources/views/login.blade.php
-     Deskripsi: Halaman Login Laravel (Dual Role: Petugas & Admin)
+     🐔 KODE SUMBER: HALAMAN OTENTIKASI (LOGIN)
+     File: login.blade.php
+     ---------------------------------------------------------
+     Deskripsi singkat:
+     File ini menangani antarmuka halaman Login dengan dual role
+     (Petugas & Admin), dilengkapi efek animasi 3D flip-card.
 ========================================================= -->
 <!DOCTYPE html>
 <html lang="id">
@@ -21,7 +24,7 @@
 
 <body>
 
-  <!-- ========================= EFEK BACKGROUND ANIMASI 3D ========================== -->
+  <!-- ===== 1. EFEK BACKGROUND ANIMASI 3D ===== -->
   <div class="shapes-container">
     <div class="shape shape-1"></div>
     <div class="shape shape-2"></div>
@@ -32,12 +35,12 @@
     <div class="noise-overlay"></div>
   </div>
 
-  <!-- ========================= AREA FORM PANEL LOGIN ========================== -->
+  <!-- ===== 2. AREA KARTU PANEL LOGIN ===== -->
   <div class="login-wrapper">
     <div class="login-card-container">
       <div class="login-card" id="loginCard">
 
-        <!-- SISI DEPAN: PILIHAN ROLE (FRONT FACE) -->
+        <!-- ===== SISI DEPAN: PILIHAN PERAN (ROLE) ===== -->
         <div class="card-face card-front">
           <div class="card-spotlight"></div>
 
@@ -76,7 +79,7 @@
           </div>
         </div>
 
-        <!-- SISI BELAKANG: FORM LOGIN (BACK FACE) -->
+        <!-- ===== SISI BELAKANG: FORMULIR LOGIN ===== -->
         <div class="card-face card-back">
           <div class="card-spotlight"></div>
 
@@ -152,7 +155,7 @@
   </script>
   @endif
 
-  <!-- JS Interaktif Flip Card & Utilities -->
+  <!-- ========================= SCRIPT UTAMA ========================== -->
   <script src="{{ asset('js/login/login-interactive.js') }}"></script>
   <script src="{{ asset('js/shared/ui-utils.js') }}"></script>
   

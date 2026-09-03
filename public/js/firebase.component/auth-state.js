@@ -1,14 +1,19 @@
 /* =========================================================
-   SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
+   🐔 KODE SUMBER: PENGELOLA STATUS AUTENTIKASI
    File: auth-state.js
-   Deskripsi: Mengelola status autentikasi pengguna secara 
-   real-time, pembaruan nama profil di UI, serta fungsi logout.
+   ---------------------------------------------------------
+   Deskripsi singkat:
+   File ini memonitor status login secara real-time, mengamankan
+   sesi, menampilkan nama profil, serta menangani fungsi logout.
 ========================================================= */
 
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 import { auth, db } from "./firebase-init.js";
 
+// =========================================
+// 1. UTILITAS BANTUAN (HELPER)
+// =========================================
 /**
  * Helper: Mendapatkan path login yang benar berdasarkan kedalaman folder saat ini.
  * Mencegah redirect ke URL yang salah saat berada di subfolder (misal: admin-core).
@@ -35,6 +40,9 @@ window.goToProfile = function() {
     }
 };
 
+// =========================================
+// 2. PEMANTAUAN STATUS LOGIN (REALTIME)
+// =========================================
 // Menunggu struktur DOM selesai dimuat
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -150,6 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+// =========================================
+// 3. FUNGSI LOGOUT (PEMUTUSAN SESI)
+// =========================================
 /**
  * Fungsi global untuk menangani proses Logout Pengguna.
  * Menggunakan SweetAlert jika tersedia untuk user experience yang lebih baik.
@@ -250,9 +261,9 @@ function redirectBasedOnRole(isAdmin) {
     }
 }
 
-// =========================================================
-// FITUR DUKUNGAN OFFLINE SEDERHANA (OFFLINE SUPPORT)
-// =========================================================
+// =========================================
+// 4. DUKUNGAN OFFLINE (OFFLINE SUPPORT)
+// =========================================
 document.addEventListener('DOMContentLoaded', () => {
     // Membuat elemen banner offline
     const offlineBanner = document.createElement('div');

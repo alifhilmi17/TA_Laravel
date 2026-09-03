@@ -1,8 +1,10 @@
 /* =========================================================
    🐔 KODE SUMBER: INPUT PRODUKSI HARIAN (FIRESTORE)
    File: inputproduksi.js
-   Deskripsi: Mengelola logika halaman Input Produksi harian,
-   menggunakan Google Firebase Firestore.
+   ---------------------------------------------------------
+   Deskripsi singkat:
+   File ini mengelola logika UI dan interaksi database Firestore 
+   untuk mencatat hasil produksi telur, pakan, dan mortalitas.
 ========================================================= */
 
 import { 
@@ -18,7 +20,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 import { db } from "../firebase.component/firebase-init.js";
 
-// State Global
+// =========================================
+// 1. DEKLARASI STATE & KOLEKSI FIRESTORE
+// =========================================
 let dataProduksi = [];
 let dataAyam = [];
 let dataPakan = [];
@@ -32,21 +36,16 @@ const pakanCollection = collection(db, "stok_pakan");
 let unsubscribeAyam = null;
 
 // =========================================
-// 1. UTILITAS & FORMATTING
+// 2. UTILITAS & FORMATTING
 // =========================================
 
-window.getLocalDateString = function() {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
-};
-
 // =========================================
-// 2. INISIALISASI & FETCH DATA
+// 3. INISIALISASI PROGRAM & FETCH DATA
 // =========================================
 
+/**
+ * Memuat dan mengurutkan seluruh data produksi harian dari Firestore.
+ */
 async function loadProduksiData() {
     try {
         const q = query(produksiCollection, orderBy("tanggal", "desc"));
@@ -89,6 +88,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 });
 
+/**
+ * Memuat daftar jenis pakan yang pernah dibeli ke dalam dropdown input pakan opsional.
+ */
 function loadPakanOptions() {
     const selectEl = document.getElementById('pakanJenisProduksi');
     if (!selectEl) return;
@@ -106,7 +108,7 @@ function loadPakanOptions() {
 }
 
 // =========================================
-// 3. UI INTERACTIONS (DROPDOWNS & AUTOFILL)
+// 4. UI INTERACTIONS (DROPDOWNS & AUTOFILL)
 // =========================================
 /**
  * Memuat daftar pilihan (options) Batch Ayam yang sedang 'Aktif' ke dalam dropdown modal
@@ -142,6 +144,9 @@ function loadBatchOptions(selectedId = '') {
     }
 }
 
+/**
+ * Mengisi otomatis field form (Kandang, Jenis Telur, dll) berdasarkan pilihan batch.
+ */
 window.autoFillFromBatch = function() {
     const selectEl = document.getElementById('batchProduksi');
     if (!selectEl || !selectEl.value) return;
@@ -170,6 +175,9 @@ window.autoFillFromBatch = function() {
     }
 };
 
+/**
+ * Mengunci field input agar tidak bisa diedit manual setelah terisi otomatis dari batch.
+ */
 function lockBatchFields() {
     ['kandangProduksi', 'jenisTelurProduksi'].forEach(id => {
         const el = document.getElementById(id);
@@ -208,6 +216,9 @@ function resetBatchFieldsForNewEntry() {
     });
 }
 
+/**
+ * Menghitung otomatis nilai total telur dan konversi papan ke butir secara real-time.
+ */
 window.calculateTotal = function() {
     const papanEl = document.getElementById('telurPapan');
     const sisaEl = document.getElementById('telurSisa');
@@ -301,9 +312,13 @@ window.validateProduksiRealtime = function() {
 }
 
 // =========================================
-// 3.5 LOGIKA INPUT MINGGUAN (BULK)
+// 5. LOGIKA INPUT MINGGUAN (BULK)
 // =========================================
 
+/**
+ * Berpindah mode input antara 'Harian' (1 form) dan 'Mingguan' (7 baris form sekaligus).
+ * @param {string} mode - Mode input ('harian' atau 'mingguan')
+ */
 window.switchInputMode = function(mode) {
     const inputModeEl = document.getElementById('inputMode');
     if (!inputModeEl) return;
@@ -345,6 +360,9 @@ window.switchInputMode = function(mode) {
     }
 };
 
+/**
+ * Mendeteksi perubahan tanggal mulai pada mode mingguan untuk me-regenerate baris form.
+ */
 window.onStartDateChange = function() {
     const inputMode = document.getElementById('inputMode').value;
     if (inputMode === 'mingguan') {
@@ -352,6 +370,9 @@ window.onStartDateChange = function() {
     }
 };
 
+/**
+ * Menghasilkan 7 baris form input secara dinamis untuk mode input mingguan.
+ */
 function generateWeeklyRows() {
     const container = document.getElementById('weeklyRows');
     if (!container) return;
@@ -452,6 +473,10 @@ function generateWeeklyRows() {
     }
 }
 
+/**
+ * Menangani konversi input papan telur ke butir khusus untuk form mode mingguan.
+ * @param {number} dayNum - Nomor urut hari (1-7)
+ */
 window.onWeeklyPapanInput = function(dayNum) {
     const row = document.querySelector(`.weekly-row[data-day="${dayNum}"]`);
     if (!row) return;
@@ -471,6 +496,10 @@ window.onWeeklyPapanInput = function(dayNum) {
     window.calculateWeeklyRow(dayNum);
 };
 
+/**
+ * Menghitung otomatis total telur dan validasi per baris pada form mode mingguan.
+ * @param {number} dayNum - Nomor urut hari (1-7)
+ */
 window.calculateWeeklyRow = function(dayNum) {
     const row = document.querySelector(`.weekly-row[data-day="${dayNum}"]`);
     if (!row) return;
@@ -531,8 +560,13 @@ window.calculateWeeklyRow = function(dayNum) {
 };
 
 // =========================================
-// 4. CRUD FIRESTORE
+// 6. MODUL PRODUKSI - CRUD FIRESTORE
 // =========================================
+/**
+ * Membuka jendela modal input produksi, bisa dalam mode tambah baru atau edit.
+ * @param {string} batchId - ID batch opsional untuk pre-fill dropdown
+ * @param {number|null} minggu - Angka minggu (khusus bulk action)
+ */
 window.openProduksiModal = function(batchId = '', minggu = null) {
     const form = document.getElementById('produksiForm');
     const modal = document.getElementById('produksiModal');
@@ -962,6 +996,10 @@ window.saveProduksiData = async function(event) {
     }
 };
 
+/**
+ * Membuka jendela modal dengan data produksi harian yang sudah ada untuk diedit.
+ * @param {string} id - UID dokumen Firestore yang akan diedit
+ */
 window.editProduksi = function(id) {
     const prod = dataProduksi.find(p => p.id === id);
     if (prod) {
@@ -1007,6 +1045,10 @@ window.editProduksi = function(id) {
     }
 };
 
+/**
+ * Menghapus satu entri data produksi secara permanen dari Firestore.
+ * @param {string} id - UID dokumen Firestore yang akan dihapus
+ */
 window.deleteProduksi = function(id) {
     Swal.fire({
         title: 'Hapus Data?',
@@ -1036,6 +1078,11 @@ window.deleteProduksi = function(id) {
     });
 };
 
+/**
+ * Menghapus secara massal seluruh data produksi pada satu minggu tertentu.
+ * @param {string} batchId - ID batch yang datanya akan dihapus
+ * @param {number} minggu - Angka minggu yang akan dihapus
+ */
 window.deleteMinggu = function(batchId, minggu) {
     // Cari semua data produksi yang cocok dengan batchId dan minggu tersebut
     const docsToDelete = dataProduksi.filter(p => p.batchId === batchId && p.minggu === minggu);
@@ -1092,8 +1139,12 @@ window.deleteMinggu = function(batchId, minggu) {
 };
 
 // =========================================
-// 5. TABLE & STATS
+// 7. TABEL DATA & KARTU STATISTIK
 // =========================================
+/**
+ * Membuka atau menutup grup baris (accordion) berdasarkan Batch pada tabel.
+ * @param {string} batchId - ID Batch yang di-toggle
+ */
 window.toggleBatchGroup = function(batchId) {
     if (collapsedBatches.has(batchId)) {
         collapsedBatches.delete(batchId);
@@ -1103,6 +1154,11 @@ window.toggleBatchGroup = function(batchId) {
     renderTable(); // Render ulang untuk memperbarui icon dan visibilitas
 };
 
+/**
+ * Membuka atau menutup grup baris (accordion) berdasarkan Minggu pada tabel.
+ * @param {string} batchId - ID Batch
+ * @param {number} minggu - Angka minggu
+ */
 window.toggleWeekGroup = function(batchId, minggu) {
     const key = `${batchId}-W${minggu}`;
     if (collapsedWeeks.has(key)) {
@@ -1113,6 +1169,9 @@ window.toggleWeekGroup = function(batchId, minggu) {
     renderTable();
 };
 
+/**
+ * Merender daftar baris (row) data produksi ke dalam tag Tabel HTML, termasuk hierarki grup accordion.
+ */
 function renderTable() {
     const tbody = document.getElementById("produksiTableBody");
     const emptyState = document.getElementById("emptyState");
@@ -1242,6 +1301,9 @@ function renderTable() {
     }
 }
 
+/**
+ * Memperbarui nilai angka-angka pada Kartu Info Statistik di atas tabel berdasarkan filter yang aktif.
+ */
 function updateQuickStats() {
     const filterTgl = document.getElementById('filterTanggal').value;
     let total = 0, baik = 0, cacat = 0;
@@ -1281,16 +1343,25 @@ function updateQuickStats() {
     if(document.getElementById('totalPopulasiAyam')) document.getElementById('totalPopulasiAyam').innerText = totalPopulasi.toLocaleString('id-ID') + ' Ekor';
 }
 
+/**
+ * Menerapkan filter tabel berdasarkan tanggal yang dipilih.
+ */
 window.filterTable = function() {
     renderTable();
     updateQuickStats();
 };
 
+/**
+ * Mereset filter tanggal dan menampilkan seluruh data.
+ */
 window.resetFilter = function() {
     document.getElementById('filterTanggal').value = '';
     window.filterTable();
 };
 
+/**
+ * Mengunduh laporan rekam data produksi harian dalam format CSV.
+ */
 window.downloadLaporanCSV = function() {
     if (dataProduksi.length === 0) return;
     let csv = "ID,Tanggal,Batch,Jenis Telur,Kandang,Telur Baik,Telur Cacat,Total Telur,Ayam Tidak Bertelur,Ayam Mati,Total Ayam\n";

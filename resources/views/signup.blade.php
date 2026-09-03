@@ -1,8 +1,10 @@
 <!-- =========================================================
-     SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
-     File: signup.html
-     Deskripsi: Halaman antarmuka pendaftaran akun (Registrasi)
-     untuk mendaftarkan peternak baru ke dalam sistem.
+     🐔 KODE SUMBER: HALAMAN REGISTRASI (DAFTAR AKUN)
+     File: signup.blade.php
+     ---------------------------------------------------------
+     Deskripsi singkat:
+     File ini menangani antarmuka (UI) pendaftaran akun baru
+     untuk petugas kandang peternakan ke dalam sistem LIBAS.
 ========================================================= -->
 <!DOCTYPE html>
 <html lang="id">
@@ -27,14 +29,14 @@
 
 <body>
 
-    <!-- ========================= AREA BACKGROUND ========================== -->
+    <!-- ===== 1. AREA BACKGROUND ===== -->
     <!-- Bingkai pembantalan yang menampung efek noise atau tekstur dasar laman web -->
     <div class="background">
         <!-- Overlay membuat bintik-bintik modern semu transparan di atas background polos -->
         <div class="noise-overlay"></div>
     </div>
 
-    <!-- ========================= AREA FORMULIR PENDAFTARAN ========================== -->
+    <!-- ===== 2. KOTAK FORMULIR REGISTRASI ===== -->
     <!-- Kotak pusat yang mengapung di tengah layar untuk mengisi biodata profil -->
     <div class="signup-card">
 
@@ -86,7 +88,7 @@
             <button type="submit" class="signup-btn">Daftar Sekarang</button>
         </form>
 
-        <!-- ========================= TAUTAN TAMBAHAN (LINK) ========================== -->
+        <!-- ===== TAUTAN TAMBAHAN (NAVIGASI) ===== -->
         <!-- Jika ternyata sudah mendaftar atau ingin membatalkan/kembali ke awal -->
         <div class="extra-links">
             <p>Apakah Anda sudah memiliki akun? <a href="{{ route('login') }}" title="Masuk ke Akun Lama">Masuk/Login</a></p>
@@ -97,6 +99,7 @@
         </div>
     </div>
 
+    <!-- ========================= SCRIPT UTAMA ========================== -->
     <!-- Hapus signup.js karena pendaftaran ditangani oleh Backend (Laravel) -->
     <script src="{{ asset('js/shared/ui-utils.js') }}"></script>
 </body>

@@ -1,26 +1,29 @@
 <!-- =========================================================
-     SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
-     File: resources/views/dashboard.blade.php
-     Deskripsi: Halaman Dasbor Utama (Dashboard) Laravel
+     🐔 KODE SUMBER: HALAMAN DASBOR UTAMA (DASHBOARD)
+     File: dashboard.blade.php
+     ---------------------------------------------------------
+     Deskripsi singkat:
+     File ini menangani tampilan Dasbor utama aplikasi LIBAS,
+     berisi ringkasan statistik, grafik produksi, dan aksi cepat.
 ========================================================= -->
 @extends('layouts.layout')
 
 @section('title', 'LIBAS - Dasbor Utama')
 
 @section('content')
-<!-- Header Mobile -->
+<!-- ===== HEADER MOBILE ===== -->
 <header class="mobile-header">
   <div class="mobile-logo">🐔 LIBAS</div>
   <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('active')">☰</button>
 </header>
 
-<!-- Kartu Sambutan -->
+<!-- ===== KARTU SAMBUTAN (WELCOME) ===== -->
 <section class="welcome-card animate__animated animate__fadeInDown">
   <h2>Selamat Datang Kembali, {{ Auth::user()->name ?? 'Peternak' }}! 🐣</h2>
   <p>Kelola pakan, jadwal produksi, dan keuangan peternakan Anda dengan efisien.</p>
 </section>
 
-<!-- 1. STATISTIK CEPAT -->
+<!-- ===== 1. KARTU STATISTIK CEPAT (QUICK STATS) ===== -->
 <section class="quick-stats animate__animated animate__fadeInUp">
   <div class="stat-card">
     <div class="stat-icon">🥚</div>
@@ -71,7 +74,7 @@
   </div>
 </section>
 
-<!-- 2. GRAFIK ANALITIK -->
+<!-- ===== 2. GRAFIK ANALITIK (CHARTS) ===== -->
 <section class="charts-section animate__animated animate__fadeInUp">
   <div class="chart-container chart-produksi-card">
     <div class="chart-header">
@@ -92,7 +95,7 @@
   </div>
 </section>
 
-<!-- 3. AKSI CEPAT & JADWAL VAKSINASI -->
+<!-- ===== 3. WIDGET AKSI CEPAT & VAKSINASI ===== -->
 <section class="widgets-row animate__animated animate__fadeInUp">
   <!-- Kartu Kiri: Aksi Cepat -->
   <div class="widget-card-purple">
@@ -169,6 +172,7 @@
 </section>
 @endsection
 
+<!-- ========================= SCRIPT UTAMA ========================== -->
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module" src="{{ asset('js/dashboard/dashboard.js') }}"></script>

@@ -1,19 +1,27 @@
 /* =========================================================
-   SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
-   File: signup-interactive.js
-   Deskripsi: Script khusus yang menangani peristiwa (event) 
-   saat pengguna baru mendaftar akun agar tersambung ke Firebase Auth.
+   🐔 KODE SUMBER: LOGIKA REGISTRASI AKUN (FIRESTORE)
+   File: signup.js
+   ---------------------------------------------------------
+   Deskripsi singkat:
+   File ini menangani proses registrasi petugas baru dan 
+   menyimpannya ke Firebase Authentication & Firestore.
 ========================================================= */
 
-// 1. Impor fungsi Firebase untuk meregistrasi pengguna dengan metode email & sandi, 
-// serta fungsi untuk menambahkan nama profil dan melakukan pemutusan sesi paksa
+// =========================================
+// 1. IMPOR MODUL & DEPENDENSI FIREBASE
+// =========================================
 import { createUserWithEmailAndPassword, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
 // 2. Impor objek `auth` and `db` yang sudah disiapkan dari file koneksi utama
 import { auth, db } from "./firebase-init.js";
 
-// Pastikan semua struktur HTML telah dirender browser sebelum menjalankan script
+// =========================================
+// 2. FUNGSI UTAMA: INISIALISASI FORMULIR
+// =========================================
+/**
+ * Menginisialisasi event listener pada form pendaftaran setelah DOM dimuat.
+ */
 function initializeSignup() {
     
     // Mendapatkan elemen form pendaftaran dan tombol klik
@@ -110,7 +118,10 @@ function initializeSignup() {
     }
 }
 
-// Menjalankan inisialisasi dengan aman, menghindari bug DOMContentLoaded yang sudah terlewat
+// =========================================
+// 3. EKSEKUSI PROGRAM
+// =========================================
+// Menjalankan inisialisasi dengan aman untuk menghindari bug DOMContentLoaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeSignup);
 } else {

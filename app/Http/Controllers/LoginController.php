@@ -7,6 +7,16 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * =========================================================
+ * 🐔 KODE SUMBER: KONTROLER OTENTIKASI (LOGIN)
+ * File: LoginController.php
+ * ---------------------------------------------------------
+ * Deskripsi singkat:
+ * Mengelola form login, validasi sesi lokal Laravel, 
+ * dan integrasi token dengan Firebase Auth.
+ * =========================================================
+ */
 class LoginController extends Controller
 {
     /**

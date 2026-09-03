@@ -1,7 +1,10 @@
 <!-- =========================================================
-     SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
-     File: resources/views/inputproduksi.blade.php
-     Deskripsi: Halaman Input Produksi - LIBAS
+     🐔 KODE SUMBER: HALAMAN INPUT PRODUKSI HARIAN
+     File: inputproduksi.blade.php
+     ---------------------------------------------------------
+     Deskripsi singkat:
+     File ini menangani antarmuka (UI) untuk mencatat hasil 
+     produksi telur harian beserta status kualitasnya.
 ========================================================= -->
 @extends('layouts.layout')
 
@@ -12,7 +15,7 @@
 <link rel="stylesheet" href="{{ asset('css/inputproduksi/inputproduksi.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-<!-- Bagian Kop Halaman: Menampilkan Judul dan Tombol Aksi "Tambah" -->
+<!-- ===== HEADER INPUT PRODUKSI ===== -->
 <header class="page-header animate__animated animate__fadeInDown">
   <div class="header-text">
     <h2>📝 Input Produksi Harian</h2>
@@ -23,7 +26,7 @@
   </button>
 </header>
 
-<!-- Bagian Statistik Ringkas: Menampilkan kartu ringkasan telur otomatis -->
+<!-- ===== 1. KARTU STATISTIK PRODUKSI (QUICK STATS) ===== -->
 <section class="quick-stats produksi-stats animate__animated animate__fadeInUp">
   <div class="stat-card">
     <div class="stat-icon">🥚</div>
@@ -64,7 +67,7 @@
   </div>
 </section>
 
-<!-- Bagian Tabel Data: Menampilkan riwayat pencatatan harian yang bisa difilter -->
+<!-- ===== 2. TABEL RIWAYAT PRODUKSI ===== -->
 <section class="data-produksi-section animate__animated animate__fadeInUp">
   <div class="table-container shadow-card">
     <div class="table-header">
@@ -110,8 +113,7 @@
   </div>
 </section>
 
-<!-- ========================= MODAL / POP-UP FORMULIR ========================== -->
-<!-- Kotak dialog melayang, dipanggil saat "Tambah Produksi" atau "Edit" ditekan -->
+<!-- ===== MODAL / POP-UP FORMULIR PRODUKSI ===== -->
 <div id="produksiModal" class="modal">
   <div class="modal-content animate__animated animate__zoomIn">
     <div class="modal-header">
@@ -272,6 +274,7 @@
 
 @endsection
 
+<!-- ========================= SCRIPT UTAMA ========================== -->
 @push('scripts')
 <!-- Script khusus untuk Halaman Input Produksi -->
 <script type="module" src="{{ asset('js/inputproduksi/inputproduksi.js') }}"></script>

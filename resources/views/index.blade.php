@@ -1,7 +1,10 @@
 <!-- =========================================================
-     SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
-     File: resources/views/index.blade.php
-     Deskripsi: Halaman utama (Landing Page) Laravel
+     🐔 KODE SUMBER: HALAMAN UTAMA (LANDING PAGE)
+     File: index.blade.php
+     ---------------------------------------------------------
+     Deskripsi singkat:
+     File ini menangani antarmuka halaman selamat datang (Landing Page)
+     sebagai gerbang masuk utama sistem LIBAS.
 ========================================================= -->
 <!DOCTYPE html>
 <html lang="id">
@@ -22,7 +25,7 @@
 
 <body>
 
-  <!-- ========================= AREA BACKGROUND ========================== -->
+  <!-- ===== 1. AREA BACKGROUND ===== -->
   <div class="background-wrapper">
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
@@ -30,7 +33,7 @@
     <div class="noise-overlay"></div>
   </div>
 
-  <!-- ========================= KONTEN UTAMA (HERO SECTION) ========================== -->
+  <!-- ===== 2. KONTEN UTAMA (HERO SECTION) ===== -->
   <main class="hero-container">
     <div class="hero-glass">
 
@@ -71,7 +74,7 @@
     </div>
   </main>
 
-  <!-- File JavaScript via Helper Asset Laravel -->
+  <!-- ========================= SCRIPT UTAMA ========================== -->
   <script src="{{ asset('js/shared/ui-utils.js') }}"></script>
 </body>
 

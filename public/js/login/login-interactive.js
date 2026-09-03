@@ -1,7 +1,10 @@
 /* =========================================================
-   SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
-   File: public/js/login/login-interactive.js
-   Deskripsi: Logika interaktif Card Flip 3D & Toggle Password
+   🐔 KODE SUMBER: LOGIKA INTERAKTIF LOGIN
+   File: login-interactive.js
+   ---------------------------------------------------------
+   Deskripsi singkat:
+   File ini menangani logika interaktif halaman login (Card Flip 3D,
+   Toggle Password, dan Spotlight Kursor Kaca).
 ========================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,7 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const togglePassword = document.getElementById('togglePassword');
     const passwordInput = document.getElementById('password');
 
-    // 1. Klik Role Petugas -> Putar Kartu ke Depan Form Petugas
+    // =========================================
+    // 1. PILIH PERAN: PETUGAS
+    // =========================================
+    /**
+     * Memutar kartu ke sisi formulir khusus untuk akses Petugas.
+     */
     if (btnRolePetugas) {
         btnRolePetugas.addEventListener('click', () => {
             if (loginCard) {
@@ -28,7 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Klik Role Admin -> Putar Kartu ke Depan Form Admin (Aksen Emas)
+    // =========================================
+    // 2. PILIH PERAN: ADMIN
+    // =========================================
+    /**
+     * Memutar kartu ke sisi formulir khusus untuk akses Admin (Aksen Emas).
+     */
     if (btnRoleAdmin) {
         btnRoleAdmin.addEventListener('click', () => {
             if (loginCard) {
@@ -41,7 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Tombol Ganti Peran -> Kembalikan Kartu ke Pilihan Role
+    // =========================================
+    // 3. NAVIGASI: KEMBALI KE PILIH PERAN
+    // =========================================
+    /**
+     * Memutar kartu kembali ke sisi depan (Pilih Peran).
+     */
     if (btnBackToRoles) {
         btnBackToRoles.addEventListener('click', () => {
             if (loginCard) {
@@ -50,7 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Toggle Tampilkan / Sembunyikan Kata Sandi
+    // =========================================
+    // 4. FITUR: TOGGLE PASSWORD
+    // =========================================
+    /**
+     * Beralih antara menampilkan atau menyembunyikan teks kata sandi.
+     */
     if (togglePassword && passwordInput) {
         togglePassword.addEventListener('click', () => {
             const isPassword = passwordInput.getAttribute('type') === 'password';
@@ -58,7 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. Efek Spotlight Kursor Kaca (Glassmorphism Spotlight)
+    // =========================================
+    // 5. ANIMASI: SPOTLIGHT KURSOR KACA
+    // =========================================
+    /**
+     * Memberikan efek cahaya sorot mengikuti kursor mouse (Glassmorphism).
+     */
     document.querySelectorAll('.card-face').forEach(face => {
         face.addEventListener('mousemove', (e) => {
             const rect = face.getBoundingClientRect();
