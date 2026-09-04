@@ -19,6 +19,6 @@ class RestockReminderController extends Controller
      */
     public function index()
     {
-        return view('restock-reminder');
+        return view('restockpakan');
     }
 }
