@@ -5,267 +5,542 @@
      Deskripsi singkat:
      File ini menangani antarmuka (UI) untuk mencatat stok pakan harian (pembelian dan pemakaian).
 ========================================================= -->
-@extends('layouts.layout')
+@extends ('layouts.layout')
 
-@section('title', 'Stok Pakan')
+@section ('title', 'Stok Pakan')
 
-@section('content')
-<!-- Link ke CSS Khusus Halaman Stok Pakan -->
-<link rel="stylesheet" href="{{ asset('css/stokpakan/stokpakan.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+@section ('content')
+    <!-- Link ke CSS Khusus Halaman Stok Pakan -->
+    <link rel="stylesheet" href="{{ asset('css/stokpakan/stokpakan.css') }}" />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
 
-<!-- ===== HEADER ===== -->
-<header class="page-header animate__animated animate__fadeInDown">
-    <div class="header-text">
-        <h2>🥬 Manajemen Stok Pakan</h2>
-        <p>Kelola data masuk dan pemakaian pakan ternak harian</p>
-    </div>
-    <div class="header-actions">
-        <!-- Tombol Utama: Membuka modal pilihan tipe transaksi -->
-        <button class="btn-primary animate__animated animate__pulse animate__infinite" onclick="openChoiceModal()">
-            ➕ Catat Transaksi Pakan
+    <!-- ===== HEADER ===== -->
+    <header class="page-header animate__animated animate__fadeInDown">
+        <div class="header-text">
+            <h2>🥬 Manajemen Stok Pakan</h2>
+            <p>Kelola data masuk dan pemakaian pakan ternak harian</p>
+        </div>
+        <div class="header-actions">
+            <!-- Tombol Utama: Membuka modal pilihan tipe transaksi -->
+            <button
+                class="btn-primary animate__animated animate__pulse animate__infinite"
+                onclick="openChoiceModal()"
+            >
+                ➕ Catat Transaksi Pakan
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== KARTU STATISTIK ===== -->
+    <section
+        class="quick-stats pakan-stats animate__animated animate__fadeInUp"
+    >
+        <div class="stat-card">
+            <div class="stat-icon stat-masuk">📥</div>
+            <div class="stat-info">
+                <h4>Total Pakan Masuk</h4>
+                <p id="totalPakanMasuk">0 Kg</p>
+                <p id="detailPakanTersedia" style="
+                        font-size: 0.8rem;
+                        color: #64748b;
+                        margin-top: 4px;
+                        font-weight: 500;
+                    "></p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-keluar">📤</div>
+            <div class="stat-info">
+                <h4>Total Pakan Terpakai</h4>
+                <p id="totalPakanKeluar">0 Kg</p>
+            </div>
+        </div>
+        <div class="stat-card stat-sisa-card">
+            <div class="stat-icon stat-sisa">📦</div>
+            <div class="stat-info">
+                <h4>Sisa Stok Pakan</h4>
+                <p id="sisaStokPakan">0 Kg</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-bulan">📅</div>
+            <div class="stat-info">
+                <h4>Pemakaian Bulan Ini</h4>
+                <p id="pemakaianBulanIni">0 Kg</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TAB NAVIGASI ===== -->
+    <div class="tab-nav animate__animated animate__fadeInUp">
+        <button
+            class="tab-btn active"
+            id="tabRiwayat"
+            onclick="switchTab('riwayat')"
+        >
+            📋 Riwayat Stok Pakan
+        </button>
+        <button
+            class="tab-btn"
+            id="tabPemakaian"
+            onclick="switchTab('pemakaian')"
+        >
+            📤 Riwayat Pemakaian
         </button>
     </div>
-</header>
 
-<!-- ===== KARTU STATISTIK ===== -->
-<section class="quick-stats pakan-stats animate__animated animate__fadeInUp">
-    <div class="stat-card">
-        <div class="stat-icon stat-masuk">📥</div>
-        <div class="stat-info">
-            <h4>Total Pakan Masuk</h4>
-            <p id="totalPakanMasuk">0 Kg</p>
-            <p id="detailPakanTersedia" style="font-size: 0.8rem; color: #64748b; margin-top: 4px; font-weight: 500;"></p>
-        </div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-icon stat-keluar">📤</div>
-        <div class="stat-info">
-            <h4>Total Pakan Terpakai</h4>
-            <p id="totalPakanKeluar">0 Kg</p>
-        </div>
-    </div>
-    <div class="stat-card stat-sisa-card">
-        <div class="stat-icon stat-sisa">📦</div>
-        <div class="stat-info">
-            <h4>Sisa Stok Pakan</h4>
-            <p id="sisaStokPakan">0 Kg</p>
-        </div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-icon stat-bulan">📅</div>
-        <div class="stat-info">
-            <h4>Pemakaian Bulan Ini</h4>
-            <p id="pemakaianBulanIni">0 Kg</p>
-        </div>
-    </div>
-</section>
-
-<!-- ===== TAB NAVIGASI ===== -->
-<div class="tab-nav animate__animated animate__fadeInUp">
-    <button class="tab-btn active" id="tabRiwayat" onclick="switchTab('riwayat')">
-        📋 Riwayat Stok Pakan
-    </button>
-    <button class="tab-btn" id="tabPemakaian" onclick="switchTab('pemakaian')">
-        📤 Riwayat Pemakaian
-    </button>
-</div>
-
-<!-- ===== TABEL RIWAYAT STOK (FILTERED BY MASUK) ===== -->
-<section class="data-pakan-section animate__animated animate__fadeInUp" id="sectionRiwayat">
-    <div class="table-container shadow-card">
-        <div class="table-header">
-            <h3>📥 Riwayat Stok Pakan (Masuk)</h3>
-            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <label for="filterBulanPakan" style="font-weight: 600;">Filter Bulan:</label>
-                <input type="month" id="filterBulanPakan" onchange="filterData()" title="Filter Bulan"
-                    style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Poppins', sans-serif;">
-                <button class="btn-secondary" onclick="resetFilter()"
-                    style="padding: 8px 12px; border-radius: 8px; border: none; background: #e2e8f0; cursor: pointer; font-family: 'Poppins', sans-serif;">
-                    Semua Data
-                </button>
-                <button class="btn-export" onclick="downloadLaporanCSV('masuk')" title="Unduh Laporan Pakan Masuk">
-                    📥 Ekspor CSV
-                </button>
-            </div>
-        </div>
-        <div class="table-responsive">
-            <table class="data-table" id="pakanTable">
-                <thead>
-                    <tr>
-                        <th>Tanggal</th>
-                        <th>Jenis Pakan</th>
-                        <th>Jumlah (Kg)</th>
-                        <th>Keterangan</th>
-                        <th>Dicatat Oleh</th>
-                        <th style="text-align: center;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="pakanTableBody">
-                    <!-- Data dipopulasi melalui JS -->
-                </tbody>
-            </table>
-            <div id="emptyStatePakan" class="empty-state" style="display: none;">
-                <span class="empty-icon">📂</span>
-                <p>Belum ada data pakan masuk.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===== TABEL RIWAYAT PEMAKAIAN (FILTERED BY KELUAR) ===== -->
-<section class="data-pakan-section animate__animated animate__fadeInUp" id="sectionPemakaian" style="display: none;">
-    <div class="table-container shadow-card pemakaian-card">
-        <div class="table-header">
-            <h3>📤 Riwayat Pemakaian Pakan (Keluar)</h3>
-            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <label for="filterBulanPemakaian" style="font-weight: 600;">Filter Bulan:</label>
-                <input type="month" id="filterBulanPemakaian" onchange="filterPemakaian()" title="Filter Bulan Pemakaian"
-                    style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Poppins', sans-serif;">
-                <button class="btn-secondary" onclick="resetFilterPemakaian()"
-                    style="padding: 8px 12px; border-radius: 8px; border: none; background: #e2e8f0; cursor: pointer; font-family: 'Poppins', sans-serif;">
-                    Semua Data
-                </button>
-                <button class="btn-export btn-export-orange" onclick="downloadLaporanCSV('keluar')" title="Unduh Laporan Pemakaian">
-                    📥 Ekspor CSV
-                </button>
-            </div>
-        </div>
-
-        <div class="table-responsive">
-            <table class="data-table" id="pemakaianTable">
-                <thead>
-                    <tr>
-                        <th>Tanggal</th>
-                        <th>Jenis Pakan</th>
-                        <th>Jumlah (Kg)</th>
-                        <th>Keterangan</th>
-                        <th>Dicatat Oleh</th>
-                        <th style="text-align: center;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="pemakaianTableBody">
-                    <!-- Data dipopulasi melalui JS -->
-                </tbody>
-            </table>
-            <div id="emptyStatePemakaian" class="empty-state" style="display: none;">
-                <span class="empty-icon">📤</span>
-                <p>Belum ada data pemakaian pakan.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ========================= MODAL PILIHAN (CHOICE MODAL) ========================== -->
-<div id="choiceModal" class="modal">
-    <div class="modal-content choice-content animate__animated animate__fadeInUp">
-        <div class="modal-header">
-            <h3>Pilih Tipe Transaksi Pakan</h3>
-            <button type="button" class="close-btn" onclick="closeChoiceModal()">&times;</button>
-        </div>
-        <div class="choice-body">
-            <p class="choice-desc">Silakan pilih jenis aktivitas pakan yang ingin Anda catat hari ini:</p>
-            <div class="choice-grid">
-                <button class="btn-choice choice-masuk" onclick="selectTransactionType('Masuk')">
-                    <span class="choice-icon">📥</span>
-                    <div class="choice-text">
-                        <strong>Pakan Masuk</strong>
-                        <span>Penambahan stok (Pembelian / Restock)</span>
-                    </div>
-                </button>
-                <button class="btn-choice choice-keluar" onclick="selectTransactionType('Keluar')">
-                    <span class="choice-icon">📤</span>
-                    <div class="choice-text">
-                        <strong>Pakan Keluar</strong>
-                        <span>Pemakaian stok (Konsumsi Harian Ayam)</span>
-                    </div>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ========================= MODAL FORM UTAMA (STOK & PEMAKAIAN) ========================== -->
-<div id="pakanModal" class="modal">
-    <div class="modal-content animate__animated animate__zoomIn">
-        <div class="modal-header">
-            <h3 id="modalTitlePakan">Tambah Data Pakan</h3>
-            <button type="button" class="close-btn" onclick="closePakanModal()">&times;</button>
-        </div>
-        <form id="pakanForm" onsubmit="savePakanData(event)">
-            <input type="hidden" id="pakanId">
-
-            <div class="form-group">
-                <label for="tglPakan">Tanggal Transaksi</label>
-                <input type="date" id="tglPakan" required>
-            </div>
-
-            <div class="form-group">
-                <label for="tipePakan">Tipe Transaksi</label>
-                <select id="tipePakan" onchange="toggleJenisPakanInput()" required>
-                    <option value="" disabled selected>Pilih Tipe Transaksi</option>
-                    <option value="Masuk">Masuk (Beli / Restock)</option>
-                    <option value="Keluar">Keluar (Pemakaian / Konsumsi)</option>
-                </select>
-            </div>
-
-            <!-- Target Batch Ayam (Hanya untuk Keluar - Opsional) -->
-            <div class="form-group" id="batchGroupPakan" style="display: none;">
-                <label for="batchPakan">Target Batch Ayam <small style="font-weight: normal; color: #64748b;">(Opsional)</small></label>
-                <select id="batchPakan" onchange="window.autoFillPakanKeterangan ? window.autoFillPakanKeterangan() : null" style="font-family: inherit; font-size: 0.9rem; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; width: 100%;">
-                    <option value="" selected>-- Pilih Batch Target (Opsional) --</option>
-                </select>
-                <small class="hint-text">*Hubungkan transaksi pakan ini dengan batch tertentu secara relasional</small>
-            </div>
-
-            <div class="form-group">
-                <label for="jenisPakan">Jenis / Nama Pakan</label>
-                <input type="text" id="jenisPakan" placeholder="Contoh: Konsentrat BP11, Jagung Giling" required>
-                <select id="jenisPakanSelect" style="display:none;" disabled required>
-                    <option value="" disabled selected>-- Pilih Pakan Tersedia --</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="jumlahPakan">Jumlah (Kg)</label>
-                <input type="number" id="jumlahPakan" min="0.1" step="0.1" placeholder="Masukkan jumlah dalam Kilogram" required oninput="window.calculateTotalHargaPakan ? window.calculateTotalHargaPakan() : null">
-            </div>
-
-            <!-- Integrasi Otomatis ke Keuangan (Kas Pengeluaran) -->
-            <div class="form-group" id="financeGroup" style="display: none; margin-top: 15px; background: #fffcf5; padding: 15px; border-radius: 12px; border: 1px solid #fed7aa;">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                    <input type="checkbox" id="catatKeuangan" onchange="window.toggleFinanceDetails()" style="width: auto; cursor: pointer;">
-                    <label for="catatKeuangan" style="margin-bottom: 0; cursor: pointer; font-weight: 600; color: #c2410c; font-size: 0.9rem;">💰 Catat otomatis ke Kas Pengeluaran</label>
+    <!-- ===== TABEL RIWAYAT STOK (FILTERED BY MASUK) ===== -->
+    <section
+        class="data-pakan-section animate__animated animate__fadeInUp"
+        id="sectionRiwayat"
+    >
+        <div class="table-container shadow-card">
+            <div class="table-header">
+                <h3>📥 Riwayat Stok Pakan (Masuk)</h3>
+                <div
+                    style="
+                        display: flex;
+                        gap: 10px;
+                        align-items: center;
+                        flex-wrap: wrap;
+                    "
+                >
+                    <label for="filterBulanPakan" style="font-weight: 600"
+                        >Filter Bulan:</label
+                    >
+                    <input
+                        type="month"
+                        id="filterBulanPakan"
+                        onchange="filterData()"
+                        title="Filter Bulan"
+                        style="
+                            padding: 8px 12px;
+                            border: 1px solid #cbd5e1;
+                            border-radius: 8px;
+                            font-family: &quot;Poppins&quot;, sans-serif;
+                        "
+                    />
+                    <button
+                        class="btn-secondary"
+                        onclick="resetFilter()"
+                        style="
+                            padding: 8px 12px;
+                            border-radius: 8px;
+                            border: none;
+                            background: #e2e8f0;
+                            cursor: pointer;
+                            font-family: &quot;Poppins&quot;, sans-serif;
+                        "
+                    >
+                        Semua Data
+                    </button>
+                    <button
+                        class="btn-export"
+                        onclick="downloadLaporanCSV('masuk')"
+                        title="Unduh Laporan Pakan Masuk"
+                    >
+                        📥 Ekspor CSV
+                    </button>
                 </div>
-                <div id="financeDetails" style="display: none; padding-left: 22px; gap: 10px; flex-direction: column;">
-                    <div class="form-group" style="margin-bottom: 10px;">
-                        <label for="hargaPakanKg" style="font-size: 0.85rem; color: #64748b; font-weight: 500;">Harga Pakan per Kg (Rp)</label>
-                        <input type="number" id="hargaPakanKg" placeholder="Contoh: 8500" min="0" oninput="window.calculateTotalHargaPakan()">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label for="totalHargaPakan" style="font-size: 0.85rem; color: #64748b; font-weight: 500;">Total Biaya (Rp)</label>
-                        <input type="number" id="totalHargaPakan" placeholder="Terhitung otomatis..." min="0" readonly style="background-color: #e2e8f0; font-weight: bold; cursor: not-allowed;">
-                    </div>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table" id="pakanTable">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Jenis Pakan</th>
+                            <th>Jumlah (Kg)</th>
+                            <th>Keterangan</th>
+                            <th>Dicatat Oleh</th>
+                            <th style="text-align: center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pakanTableBody">
+                        <!-- Data dipopulasi melalui JS -->
+                    </tbody>
+                </table>
+                <div
+                    id="emptyStatePakan"
+                    class="empty-state"
+                    style="display: none"
+                >
+                    <span class="empty-icon">📂</span>
+                    <p>Belum ada data pakan masuk.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TABEL RIWAYAT PEMAKAIAN (FILTERED BY KELUAR) ===== -->
+    <section
+        class="data-pakan-section animate__animated animate__fadeInUp"
+        id="sectionPemakaian"
+        style="display: none"
+    >
+        <div class="table-container shadow-card pemakaian-card">
+            <div class="table-header">
+                <h3>📤 Riwayat Pemakaian Pakan (Keluar)</h3>
+                <div
+                    style="
+                        display: flex;
+                        gap: 10px;
+                        align-items: center;
+                        flex-wrap: wrap;
+                    "
+                >
+                    <label for="filterBulanPemakaian" style="font-weight: 600"
+                        >Filter Bulan:</label
+                    >
+                    <input
+                        type="month"
+                        id="filterBulanPemakaian"
+                        onchange="filterPemakaian()"
+                        title="Filter Bulan Pemakaian"
+                        style="
+                            padding: 8px 12px;
+                            border: 1px solid #cbd5e1;
+                            border-radius: 8px;
+                            font-family: &quot;Poppins&quot;, sans-serif;
+                        "
+                    />
+                    <button
+                        class="btn-secondary"
+                        onclick="resetFilterPemakaian()"
+                        style="
+                            padding: 8px 12px;
+                            border-radius: 8px;
+                            border: none;
+                            background: #e2e8f0;
+                            cursor: pointer;
+                            font-family: &quot;Poppins&quot;, sans-serif;
+                        "
+                    >
+                        Semua Data
+                    </button>
+                    <button
+                        class="btn-export btn-export-orange"
+                        onclick="downloadLaporanCSV('keluar')"
+                        title="Unduh Laporan Pemakaian"
+                    >
+                        📥 Ekspor CSV
+                    </button>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="ketPakan">Keterangan Tambahan</label>
-                <textarea id="ketPakan" rows="3" placeholder="Contoh: Dari Supplier B, Diberikan ke Kandang A"></textarea>
+            <div class="table-responsive">
+                <table class="data-table" id="pemakaianTable">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Jenis Pakan</th>
+                            <th>Jumlah (Kg)</th>
+                            <th>Keterangan</th>
+                            <th>Dicatat Oleh</th>
+                            <th style="text-align: center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pemakaianTableBody">
+                        <!-- Data dipopulasi melalui JS -->
+                    </tbody>
+                </table>
+                <div
+                    id="emptyStatePemakaian"
+                    class="empty-state"
+                    style="display: none"
+                >
+                    <span class="empty-icon">📤</span>
+                    <p>Belum ada data pemakaian pakan.</p>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="closePakanModal()">Batal</button>
-                <button type="submit" class="btn-primary">💾 Simpan Data</button>
+    <!-- ========================= MODAL PILIHAN (CHOICE MODAL) ========================== -->
+    <div id="choiceModal" class="modal">
+        <div
+            class="modal-content choice-content animate__animated animate__fadeInUp"
+        >
+            <div class="modal-header">
+                <h3>Pilih Tipe Transaksi Pakan</h3>
+                <button
+                    type="button"
+                    class="close-btn"
+                    onclick="closeChoiceModal()"
+                >
+                    &times;
+                </button>
             </div>
-        </form>
+            <div class="choice-body">
+                <p class="choice-desc">Silakan pilih jenis aktivitas pakan yang ingin Anda catat hari ini:</p>
+                <div class="choice-grid">
+                    <button
+                        class="btn-choice choice-masuk"
+                        onclick="selectTransactionType('Masuk')"
+                    >
+                        <span class="choice-icon">📥</span>
+                        <div class="choice-text">
+                            <strong>Pakan Masuk</strong>
+                            <span>Penambahan stok (Pembelian / Restock)</span>
+                        </div>
+                    </button>
+                    <button
+                        class="btn-choice choice-keluar"
+                        onclick="selectTransactionType('Keluar')"
+                    >
+                        <span class="choice-icon">📤</span>
+                        <div class="choice-text">
+                            <strong>Pakan Keluar</strong>
+                            <span>Pemakaian stok (Konsumsi Harian Ayam)</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    <!-- ========================= MODAL FORM UTAMA (STOK & PEMAKAIAN) ========================== -->
+    <div id="pakanModal" class="modal">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <div class="modal-header">
+                <h3 id="modalTitlePakan">Tambah Data Pakan</h3>
+                <button
+                    type="button"
+                    class="close-btn"
+                    onclick="closePakanModal()"
+                >
+                    &times;
+                </button>
+            </div>
+            <form id="pakanForm" onsubmit="savePakanData(event)">
+                <input type="hidden" id="pakanId" />
+
+                <div class="form-group">
+                    <label for="tglPakan">Tanggal Transaksi</label>
+                    <input type="date" id="tglPakan" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="tipePakan">Tipe Transaksi</label>
+                    <select
+                        id="tipePakan"
+                        onchange="toggleJenisPakanInput()"
+                        required
+                    >
+                        <option value="" disabled selected>
+                            Pilih Tipe Transaksi
+                        </option>
+                        <option value="Masuk">Masuk (Beli / Restock)</option>
+                        <option value="Keluar">
+                            Keluar (Pemakaian / Konsumsi)
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Target Batch Ayam (Hanya untuk Keluar - Opsional) -->
+                <div
+                    class="form-group"
+                    id="batchGroupPakan"
+                    style="display: none"
+                >
+                    <label for="batchPakan"
+                        >Target Batch Ayam
+                        <small style="font-weight: normal; color: #64748b"
+                            >(Opsional)</small
+                        ></label
+                    >
+                    <select
+                        id="batchPakan"
+                        onchange="
+                            window.autoFillPakanKeterangan
+                                ? window.autoFillPakanKeterangan()
+                                : null
+                        "
+                        style="
+                            font-family: inherit;
+                            font-size: 0.9rem;
+                            padding: 10px;
+                            border-radius: 8px;
+                            border: 1px solid #cbd5e1;
+                            width: 100%;
+                        "
+                    >
+                        <option value="" selected>
+                            -- Pilih Batch Target (Opsional) --
+                        </option>
+                    </select>
+                    <small class="hint-text"
+                        >*Hubungkan transaksi pakan ini dengan batch tertentu
+                        secara relasional</small
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="jenisPakan">Jenis / Nama Pakan</label>
+                    <input
+                        type="text"
+                        id="jenisPakan"
+                        placeholder="Contoh: Konsentrat BP11, Jagung Giling"
+                        required
+                    />
+                    <select
+                        id="jenisPakanSelect"
+                        style="display: none"
+                        disabled
+                        required
+                    >
+                        <option value="" disabled selected>
+                            -- Pilih Pakan Tersedia --
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="jumlahPakan">Jumlah (Kg)</label>
+                    <input
+                        type="number"
+                        id="jumlahPakan"
+                        min="0.1"
+                        step="0.1"
+                        placeholder="Masukkan jumlah dalam Kilogram"
+                        required
+                        oninput="
+                            window.calculateTotalHargaPakan
+                                ? window.calculateTotalHargaPakan()
+                                : null
+                        "
+                    />
+                </div>
+
+                <!-- Integrasi Otomatis ke Keuangan (Kas Pengeluaran) -->
+                <div
+                    class="form-group"
+                    id="financeGroup"
+                    style="
+                        display: none;
+                        margin-top: 15px;
+                        background: #fffcf5;
+                        padding: 15px;
+                        border-radius: 12px;
+                        border: 1px solid #fed7aa;
+                    "
+                >
+                    <div
+                        style="
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            margin-bottom: 8px;
+                        "
+                    >
+                        <input
+                            type="checkbox"
+                            id="catatKeuangan"
+                            onchange="window.toggleFinanceDetails()"
+                            style="width: auto; cursor: pointer"
+                        />
+                        <label
+                            for="catatKeuangan"
+                            style="
+                                margin-bottom: 0;
+                                cursor: pointer;
+                                font-weight: 600;
+                                color: #c2410c;
+                                font-size: 0.9rem;
+                            "
+                            >💰 Catat otomatis ke Kas Pengeluaran</label
+                        >
+                    </div>
+                    <div
+                        id="financeDetails"
+                        style="
+                            display: none;
+                            padding-left: 22px;
+                            gap: 10px;
+                            flex-direction: column;
+                        "
+                    >
+                        <div class="form-group" style="margin-bottom: 10px">
+                            <label
+                                for="hargaPakanKg"
+                                style="
+                                    font-size: 0.85rem;
+                                    color: #64748b;
+                                    font-weight: 500;
+                                "
+                                >Harga Pakan per Kg (Rp)</label
+                            >
+                            <input
+                                type="number"
+                                id="hargaPakanKg"
+                                placeholder="Contoh: 8500"
+                                min="0"
+                                oninput="window.calculateTotalHargaPakan()"
+                            />
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0">
+                            <label
+                                for="totalHargaPakan"
+                                style="
+                                    font-size: 0.85rem;
+                                    color: #64748b;
+                                    font-weight: 500;
+                                "
+                                >Total Biaya (Rp)</label
+                            >
+                            <input
+                                type="number"
+                                id="totalHargaPakan"
+                                placeholder="Terhitung otomatis..."
+                                min="0"
+                                readonly
+                                style="
+                                    background-color: #e2e8f0;
+                                    font-weight: bold;
+                                    cursor: not-allowed;
+                                "
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ketPakan">Keterangan Tambahan</label>
+                    <textarea
+                        id="ketPakan"
+                        rows="3"
+                        placeholder="Contoh: Dari Supplier B, Diberikan ke Kandang A"
+                    ></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        onclick="closePakanModal()"
+                    >
+                        Batal
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        💾 Simpan Data
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
 
-@push('scripts')
-<!-- Script khusus untuk Halaman Stok Pakan -->
-<script type="module" src="{{ asset('js/stokpakan/stokpakan.js') }}"></script>
-<!-- Skrip Autentikasi -->
-<script type="module" src="{{ asset('js/firebase.component/auth-state.js') }}"></script>
+@push ('scripts')
+    <!-- Script khusus untuk Halaman Stok Pakan -->
+    <script
+        type="module"
+        src="{{ asset('js/stokpakan/stokpakan.js') }}"
+    ></script>
+    <!-- Skrip Autentikasi -->
+    <script
+        type="module"
+        src="{{ asset('js/firebase.component/auth-state.js') }}"
+    ></script>
 @endpush

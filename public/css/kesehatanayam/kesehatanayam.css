@@ -7,7 +7,6 @@
                  tabel data, badge status, modal form, dan responsif.
 ========================================================= */
 
-
 /* =========================================================
    📌 HEADER HALAMAN KESEHATAN AYAM
 ========================================================= */
@@ -25,7 +24,9 @@
     color: white;
     position: relative;
     overflow: hidden;
-    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease;
+    transition:
+        transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+        box-shadow 0.4s ease;
     cursor: default;
 }
 
@@ -43,15 +44,17 @@
 ========================================================= */
 /* Ikon 🏥 raksasa transparan di pojok kanan atas sebagai hiasan latar header kesehatan */
 .page-header::after {
-    content: '🏥';
+    content: "🏥";
     position: absolute;
     right: 220px;
     top: -20px;
     font-size: 140px;
     opacity: 0.15;
     transform: rotate(15deg);
-    transition: transform 0.6s ease, opacity 0.6s ease;
-    pointer-events: none;            /* Ikon tidak bisa diklik */
+    transition:
+        transform 0.6s ease,
+        opacity 0.6s ease;
+    pointer-events: none; /* Ikon tidak bisa diklik */
 }
 
 /* Ikon berputar ringan dan membesar saat header di-hover */
@@ -146,7 +149,6 @@
     box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
 }
 
-
 /* =========================================================
    📊 GRID KARTU STATISTIK KILAT
 ========================================================= */
@@ -172,7 +174,9 @@
     gap: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(0, 0, 0, 0.02);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 /* Kartu naik sedikit dan bayangan menguat saat di-hover */
@@ -240,7 +244,6 @@
     color: #1e293b;
 }
 
-
 /* =========================================================
    🗂️ NAVIGASI TABS (CATATAN MEDIS / VAKSINASI)
 ========================================================= */
@@ -249,7 +252,7 @@
     display: flex;
     gap: 15px;
     margin-bottom: 20px;
-    border-bottom: 2px solid #e2e8f0;      /* Garis bawah pemisah area tab */
+    border-bottom: 2px solid #e2e8f0; /* Garis bawah pemisah area tab */
     padding-bottom: 10px;
 }
 
@@ -298,7 +301,6 @@
     display: block;
 }
 
-
 /* =========================================================
    🃏 WRAPPER KARTU TABEL UTAMA
 ========================================================= */
@@ -309,7 +311,7 @@
     padding: 30px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(0, 0, 0, 0.02);
-    border-top: 5px solid #0284c7;         /* Penanda warna modul kesehatan (biru) */
+    border-top: 5px solid #0284c7; /* Penanda warna modul kesehatan (biru) */
     margin-bottom: 2rem;
 }
 
@@ -449,7 +451,6 @@
     background-color: #f0f9ff;
 }
 
-
 /* =========================================================
    💬 TAMPILAN KOSONG (EMPTY STATE)
 ========================================================= */
@@ -470,7 +471,6 @@
     margin-bottom: 1rem;
     opacity: 0.5;
 }
-
 
 /* =========================================================
    🪟 OVERLAY MODAL (BACKDROP)
@@ -508,7 +508,7 @@
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    border-top: 5px solid #0284c7;         /* Penanda biru identitas modul kesehatan */
+    border-top: 5px solid #0284c7; /* Penanda biru identitas modul kesehatan */
 }
 
 /* =========================================================
@@ -795,13 +795,11 @@
     color: white;
 }
 
-
 /* =========================================================
    📱 RESPONSIF — LAYAR KECIL (≤768px)
 ========================================================= */
 /* Penyesuaian untuk HP: susunan berubah dari sejajar menjadi bertumpuk */
 @media (max-width: 768px) {
-
     /* Header ditumpuk vertikal di HP */
     .page-header {
         flex-direction: column;

@@ -7,7 +7,6 @@
                  tombol aksi, dan responsif mobile.
 ========================================================= */
 
-
 /* =========================================================
    📌 HEADER HALAMAN KEUANGAN
 ========================================================= */
@@ -22,7 +21,9 @@
     color: white;
     position: relative;
     overflow: hidden;
-    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease;
+    transition:
+        transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+        box-shadow 0.4s ease;
     cursor: default;
 }
 
@@ -40,15 +41,17 @@
 ========================================================= */
 /* Ikon kartu kredit raksasa transparan di pojok kanan sebagai hiasan latar header */
 .page-header::after {
-    content: '💳';
+    content: "💳";
     position: absolute;
     right: 20px;
     top: -20px;
     font-size: 140px;
     opacity: 0.15;
     transform: rotate(-15deg);
-    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.6s ease;
-    pointer-events: none;          /* Ikon tidak bisa diklik, hanya dekorasi */
+    transition:
+        transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+        opacity 0.6s ease;
+    pointer-events: none; /* Ikon tidak bisa diklik, hanya dekorasi */
 }
 
 /* Ikon watermark berputar dan membesar saat header di-hover */
@@ -67,7 +70,7 @@
     margin: 0 0 8px 0;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     position: relative;
-    z-index: 1;                    /* Pastikan teks di atas dekorasi watermark */
+    z-index: 1; /* Pastikan teks di atas dekorasi watermark */
     letter-spacing: 0.5px;
 }
 
@@ -83,7 +86,6 @@
     position: relative;
     z-index: 1;
 }
-
 
 /* =========================================================
    📐 GRID LAYOUT UTAMA (FORM KIRI + TABEL KANAN)
@@ -159,7 +161,6 @@
     font-weight: 700;
 }
 
-
 /* =========================================================
    📋 GRUP INPUT FORM (FORM GROUP)
 ========================================================= */
@@ -192,7 +193,7 @@
     padding: 12px 16px;
     border: 1px solid #cbd5e1;
     border-radius: 12px;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 0.95rem;
     transition: all 0.3s;
     background-color: #f8fafc;
@@ -286,14 +287,14 @@
 .btn-primary,
 .btn-secondary {
     padding: 14px 20px;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-weight: 600;
     border: none;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     font-size: 1rem;
-    flex: 1;                       /* Membagi lebar secara merata dengan tombol lain */
+    flex: 1; /* Membagi lebar secara merata dengan tombol lain */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -331,7 +332,6 @@
     transform: translateY(-2px);
 }
 
-
 /* =========================================================
    💰 GRID KARTU RINGKASAN SALDO (3 KARTU DOMPET)
 ========================================================= */
@@ -353,7 +353,9 @@
     text-align: left;
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 /* Kartu saldo naik sedikit saat di-hover */
@@ -367,7 +369,7 @@
 ========================================================= */
 /* Lingkaran besar putih transparan di pojok kanan atas sebagai hiasan latar kotak saldo */
 .summary-box::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -20px;
     right: -20px;
@@ -385,7 +387,7 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     position: relative;
-    z-index: 1;                    /* Di atas dekorasi lingkaran */
+    z-index: 1; /* Di atas dekorasi lingkaran */
     font-weight: 700;
 }
 
@@ -406,8 +408,12 @@
     background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
     border: 1px solid #86efac;
 }
-.box-income h4 { color: #166534; }
-.box-income p  { color: #15803d; }
+.box-income h4 {
+    color: #166534;
+}
+.box-income p {
+    color: #15803d;
+}
 
 /* =========================================================
    ❤️ KARTU PENGELUARAN (MERAH)
@@ -417,8 +423,12 @@
     background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
     border: 1px solid #fca5a5;
 }
-.box-expense h4 { color: #991b1b; }
-.box-expense p  { color: #b91c1c; }
+.box-expense h4 {
+    color: #991b1b;
+}
+.box-expense p {
+    color: #b91c1c;
+}
 
 /* =========================================================
    💙 KARTU SALDO AKHIR (BIRU)
@@ -428,9 +438,12 @@
     background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
     border: 1px solid #93c5fd;
 }
-.box-balance h4 { color: #1e40af; }
-.box-balance p  { color: #1d4ed8; }
-
+.box-balance h4 {
+    color: #1e40af;
+}
+.box-balance p {
+    color: #1d4ed8;
+}
 
 /* =========================================================
    🔍 INPUT PENCARIAN RIWAYAT TRANSAKSI
@@ -440,7 +453,7 @@
     padding: 10px 18px;
     border: 1px solid #cbd5e1;
     border-radius: 30px;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 0.9rem;
     width: 250px;
     background: #f8fafc;
@@ -493,12 +506,12 @@
 ========================================================= */
 /* Sel header dengan latar abu, teks kapital, dan posisi sticky agar tidak hilang saat scroll */
 .data-table th {
-    background: #f8fafc;                    /* Sedikit berbeda dari latar isi tabel */
+    background: #f8fafc; /* Sedikit berbeda dari latar isi tabel */
     font-weight: 700;
     text-align: center;
     color: #475569;
     position: sticky;
-    top: 0;                                 /* Kepala tabel selalu terlihat saat scroll */
+    top: 0; /* Kepala tabel selalu terlihat saat scroll */
     text-transform: uppercase;
     font-size: 0.85rem;
     letter-spacing: 0.5px;
@@ -528,7 +541,6 @@
     background: #f8fafc;
     border-radius: 12px;
 }
-
 
 /* =========================================================
    🏷️ LENCANA TIPE TRANSAKSI (BADGE)
@@ -587,7 +599,7 @@
     cursor: pointer;
     font-size: 0.85rem;
     font-weight: 600;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     display: inline-flex;
     align-items: center;
@@ -616,7 +628,7 @@
     cursor: pointer;
     font-size: 0.85rem;
     font-weight: 600;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     display: inline-flex;
     align-items: center;
@@ -695,7 +707,7 @@
     padding: 10px 18px;
     border: 1px solid #cbd5e1;
     border-radius: 30px;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 0.9rem;
     width: 220px;
     background: #f8fafc;
@@ -721,7 +733,7 @@
     border-radius: 30px;
     font-weight: 600;
     font-size: 0.9rem;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -752,12 +764,20 @@
 }
 
 @keyframes rotation {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
-.btn-primary.loading .btn-text { display: none; }
-.btn-primary.loading .loader { display: inline-block; }
+.btn-primary.loading .btn-text {
+    display: none;
+}
+.btn-primary.loading .loader {
+    display: inline-block;
+}
 
 /* Skeleton Loading untuk Tabel */
 .table-loader-container {
@@ -775,8 +795,12 @@
 }
 
 @keyframes skeleton-loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 /* =========================================================
@@ -804,10 +828,24 @@
 /* =========================================================
    🛠️ UTILITY CLASSES
 ========================================================= */
-.text-right { text-align: right !important; }
-.text-center { text-align: center !important; }
-.border-none { border: none !important; padding: 0 !important; margin-bottom: 20px !important; }
-.form-label { font-weight: 600; margin-bottom: 8px; color: #475569; font-size: 0.95rem; display: block; }
+.text-right {
+    text-align: right !important;
+}
+.text-center {
+    text-align: center !important;
+}
+.border-none {
+    border: none !important;
+    padding: 0 !important;
+    margin-bottom: 20px !important;
+}
+.form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 0.95rem;
+    display: block;
+}
 
 /* =========================================================
    📂 BARIS HEADER KELOMPOK (TRANSACTION GROUP HEADERS)
@@ -882,7 +920,7 @@
     font-weight: 600;
     font-size: 0.85rem;
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     display: flex;
     justify-content: center;
