@@ -1,7 +1,7 @@
-@extends('layouts.layout')
+@extends ('layouts.layout')
 
-@section('title', 'Edit Profile')
+@section ('title', 'Edit Profile')
 
-@section('content')
+@section ('content')
     <!-- Halaman Kosong -->
 @endsection

@@ -7,8 +7,14 @@
    sesi, menampilkan nama profil, serta menangani fungsi logout.
 ========================================================= */
 
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+import {
+    onAuthStateChanged,
+    signOut,
+} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+import {
+    doc,
+    getDoc,
+} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 import { auth, db } from "./firebase-init.js";
 
 // =========================================
@@ -20,23 +26,23 @@ import { auth, db } from "./firebase-init.js";
  */
 function getLoginPath() {
     const href = window.location.href;
-    if (href.includes('admin-core')) return '../../login.html';
-    if (href.includes('admin.frontend')) return '../login.html';
-    return 'login.html';
+    if (href.includes("admin-core")) return "../../login.html";
+    if (href.includes("admin.frontend")) return "../login.html";
+    return "login.html";
 }
 
 /**
  * Global Helper: Navigasi ke Halaman Edit Profil
  * Fungsi ini dipanggil dari ikon pensil atau menu profil di Sidebar
  */
-window.goToProfile = function() {
+window.goToProfile = function () {
     // ✅ FIX: Deteksi lokasi saat ini untuk menentukan path yang tepat
-    if (window.location.href.includes('admin-core')) {
+    if (window.location.href.includes("admin-core")) {
         // Dari admin panel (admin.frontend/admin-core/)
-        window.location.href = '../../editProfileTAalip.html';
+        window.location.href = "../../editProfileTAalip.html";
     } else {
         // Dari halaman user biasa (root)
-        window.location.href = 'editProfileTAalip.html';
+        window.location.href = "editProfileTAalip.html";
     }
 };
 
@@ -44,13 +50,13 @@ window.goToProfile = function() {
 // 2. PEMANTAUAN STATUS LOGIN (REALTIME)
 // =========================================
 // Menunggu struktur DOM selesai dimuat
-document.addEventListener('DOMContentLoaded', () => {
-    
+document.addEventListener("DOMContentLoaded", () => {
     // Mengecek Status Login Pengguna secara Realtime dari Firebase
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            const profileNameElements = document.querySelectorAll('.profile-name');
-            let displayNameResult = user.displayName || 'Peternak';
+            const profileNameElements =
+                document.querySelectorAll(".profile-name");
+            let displayNameResult = user.displayName || "Peternak";
             let isAdminUser = false; // Flag apakah pengguna ini adalah administrator
 
             try {
@@ -64,15 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (userData.disabled === true) {
                         console.warn("Akun dinonaktifkan oleh administrator.");
                         await signOut(auth);
-                        if (typeof Swal !== 'undefined') {
+                        if (typeof Swal !== "undefined") {
                             await Swal.fire({
-                                icon: 'warning',
-                                title: 'Akun Dinonaktifkan',
-                                text: 'Akun Anda telah dinonaktifkan oleh administrator. Silakan hubungi admin.',
-                                confirmButtonColor: '#ff7e5f'
+                                icon: "warning",
+                                title: "Akun Dinonaktifkan",
+                                text: "Akun Anda telah dinonaktifkan oleh administrator. Silakan hubungi admin.",
+                                confirmButtonColor: "#ff7e5f",
                             });
                         } else {
-                            alert("Akun Anda telah dinonaktifkan oleh administrator. Silakan hubungi admin.");
+                            alert(
+                                "Akun Anda telah dinonaktifkan oleh administrator. Silakan hubungi admin.",
+                            );
                         }
                         window.location.href = getLoginPath();
                         return;
@@ -82,25 +90,40 @@ document.addEventListener('DOMContentLoaded', () => {
                         displayNameResult = userData.fullname;
                     }
                     // Tandai sebagai admin jika field role = 'admin' atau 'owner' (Case-insensitive)
-                    const userRoleClean = (userData.role || 'user').trim().toLowerCase();
-                    if (userRoleClean === 'admin' || userRoleClean === 'administrator' || userRoleClean === 'super_admin' || userRoleClean === 'owner') {
+                    const userRoleClean = (userData.role || "user")
+                        .trim()
+                        .toLowerCase();
+                    if (
+                        userRoleClean === "admin" ||
+                        userRoleClean === "administrator" ||
+                        userRoleClean === "super_admin" ||
+                        userRoleClean === "owner"
+                    ) {
                         isAdminUser = true;
                     }
-
                 } else {
                     // === TAHAP 2: Cek koleksi 'admin' (untuk administrator) ===
                     // Admin yang dibuat via adminlogin.html hanya punya dokumen di 'admin', bukan 'user'
-                    const adminDocSnap = await getDoc(doc(db, "admin", user.uid));
+                    const adminDocSnap = await getDoc(
+                        doc(db, "admin", user.uid),
+                    );
 
                     if (adminDocSnap.exists()) {
                         // ✅ Admin terverifikasi — boleh akses halaman user tanpa login ulang
                         const adminData = adminDocSnap.data();
-                        displayNameResult = adminData.fullname || adminData.username || 'Administrator';
+                        displayNameResult =
+                            adminData.fullname ||
+                            adminData.username ||
+                            "Administrator";
                         isAdminUser = true;
-                        console.log("Administrator mengakses halaman user — akses diberikan.");
-                    } else if (!window.location.href.includes('admin')) {
+                        console.log(
+                            "Administrator mengakses halaman user — akses diberikan.",
+                        );
+                    } else if (!window.location.href.includes("admin")) {
                         // Bukan user, bukan admin, dan tidak sedang di halaman admin → paksa logout
-                        console.warn("Sesi tidak valid: akun tidak ditemukan di database.");
+                        console.warn(
+                            "Sesi tidak valid: akun tidak ditemukan di database.",
+                        );
                         await signOut(auth);
                         window.location.href = getLoginPath();
                         return;
@@ -110,22 +133,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 // === TAHAP 3: Tampilkan tombol "Kembali ke Admin Panel" ===
                 // Gunakan flag isAdminUser untuk efisiensi (tidak perlu query ulang)
                 // Hanya tampilkan jika tidak sedang di dalam folder admin-core
-                if (!window.location.href.includes('admin-core')) {
+                if (!window.location.href.includes("admin-core")) {
                     if (isAdminUser) {
                         // Sudah tahu ini admin dari atas, langsung tampilkan
-                        const container = document.getElementById('adminSwitchContainer');
-                        if (container) container.style.display = 'block';
+                        const container = document.getElementById(
+                            "adminSwitchContainer",
+                        );
+                        if (container) container.style.display = "block";
                     } else {
                         // Untuk user biasa, cek apakah punya role admin
                         const adminRef = doc(db, "admin", user.uid);
                         const adminSnap = await getDoc(adminRef);
                         if (adminSnap.exists()) {
-                            const container = document.getElementById('adminSwitchContainer');
-                            if (container) container.style.display = 'block';
+                            const container = document.getElementById(
+                                "adminSwitchContainer",
+                            );
+                            if (container) container.style.display = "block";
                         }
                     }
                 }
-
             } catch (err) {
                 console.error("Gagal verifikasi data user/admin: ", err);
             }
@@ -136,26 +162,28 @@ document.addEventListener('DOMContentLoaded', () => {
             // Simpan status profil ke variabel global agar dapat diakses oleh sidebar dinamis
             window.userProfileState = {
                 displayName: displayNameResult,
-                isAdmin: isAdminUser
+                isAdmin: isAdminUser,
             };
 
             // Terapkan nama ke semua elemen .profile-name di sidebar
-            if (typeof window.updateSidebarProfileFromGlobalState === 'function') {
+            if (
+                typeof window.updateSidebarProfileFromGlobalState === "function"
+            ) {
                 window.updateSidebarProfileFromGlobalState();
             } else {
-                profileNameElements.forEach(el => {
+                profileNameElements.forEach((el) => {
                     el.textContent = displayNameResult;
                 });
-                const container = document.getElementById('adminSwitchContainer');
-                if (container && isAdminUser) container.style.display = 'block';
+                const container = document.getElementById(
+                    "adminSwitchContainer",
+                );
+                if (container && isAdminUser) container.style.display = "block";
             }
-
         } else {
             // Tidak ada user yang login — tidak ada tindakan paksa di sini
             // Guard per-halaman ada di masing-masing modul jika diperlukan
         }
     });
-
 });
 
 // =========================================
@@ -165,9 +193,9 @@ document.addEventListener('DOMContentLoaded', () => {
  * Fungsi global untuk menangani proses Logout Pengguna.
  * Menggunakan SweetAlert jika tersedia untuk user experience yang lebih baik.
  */
-window.logoutUser = async function() {
+window.logoutUser = async function () {
     // Mengecek apakah library SweetAlert2 tersedia untuk tampilan yang lebih premium
-    if (typeof Swal !== 'undefined') {
+    if (typeof Swal !== "undefined") {
         Swal.fire({
             title: "Yakin ingin logout?",
             text: "Anda akan keluar dari sesi aplikasi.",
@@ -176,7 +204,7 @@ window.logoutUser = async function() {
             confirmButtonText: "Ya, Logout",
             cancelButtonText: "Batal",
             confirmButtonColor: "#f59e0b", // Oranye
-            cancelButtonColor: "#64748b"  // Abu-abu netral
+            cancelButtonColor: "#64748b", // Abu-abu netral
         }).then(async (result) => {
             if (result.isConfirmed) {
                 executeLogout();
@@ -197,7 +225,7 @@ async function executeLogout() {
     try {
         let isAdmin = window.isLibasAdmin === true;
         const user = auth.currentUser;
-        
+
         // Verifikasi fallback jika cache belum sempat terisi
         if (!isAdmin && user) {
             const adminDoc = await getDoc(doc(db, "admin", user.uid));
@@ -206,8 +234,15 @@ async function executeLogout() {
             } else {
                 const userDoc = await getDoc(doc(db, "user", user.uid));
                 if (userDoc.exists()) {
-                    const roleClean = (userDoc.data().role || 'user').trim().toLowerCase();
-                    if (roleClean === 'admin' || roleClean === 'administrator' || roleClean === 'super_admin' || roleClean === 'owner') {
+                    const roleClean = (userDoc.data().role || "user")
+                        .trim()
+                        .toLowerCase();
+                    if (
+                        roleClean === "admin" ||
+                        roleClean === "administrator" ||
+                        roleClean === "super_admin" ||
+                        roleClean === "owner"
+                    ) {
                         isAdmin = true;
                     }
                 }
@@ -215,17 +250,17 @@ async function executeLogout() {
         }
 
         await signOut(auth);
-        
+
         // Membersihkan cache lokal opsional
-        localStorage.removeItem('libas_username');
+        localStorage.removeItem("libas_username");
 
         // Jika pakai Swal, tampilkan sukses sejenak lalu redirect
-        if (typeof Swal !== 'undefined') {
+        if (typeof Swal !== "undefined") {
             Swal.fire({
-                icon: 'success',
-                title: 'Berhasil Logout',
+                icon: "success",
+                title: "Berhasil Logout",
                 showConfirmButton: false,
-                timer: 1200
+                timer: 1200,
             }).then(() => {
                 redirectBasedOnRole(isAdmin);
             });
@@ -234,8 +269,12 @@ async function executeLogout() {
         }
     } catch (error) {
         console.error("Gagal logout:", error);
-        if (typeof Swal !== 'undefined') {
-            Swal.fire('Gagal', 'Terjadi kesalahan saat logout: ' + error.message, 'error');
+        if (typeof Swal !== "undefined") {
+            Swal.fire(
+                "Gagal",
+                "Terjadi kesalahan saat logout: " + error.message,
+                "error",
+            );
         } else {
             alert("Gagal melakukan logout: " + error.message);
         }
@@ -247,82 +286,82 @@ async function executeLogout() {
  * @param {boolean} isAdmin - Status otoritas pengguna
  */
 function redirectBasedOnRole(isAdmin) {
-    const isAdminCore = window.location.href.includes('admin-core');
-    const isAdminRoot = window.location.href.includes('admin.frontend') && !isAdminCore;
+    const isAdminCore = window.location.href.includes("admin-core");
+    const isAdminRoot =
+        window.location.href.includes("admin.frontend") && !isAdminCore;
 
     // Sejak adminlogin.html digabungkan ke login.html di root,
     // seluruh rute pengalihan logout/sesi mengarah ke login.html utama.
     if (isAdminCore) {
-        window.location.href = '../../login.html';
+        window.location.href = "../../login.html";
     } else if (isAdminRoot) {
-        window.location.href = '../login.html';
+        window.location.href = "../login.html";
     } else {
-        window.location.href = 'login.html';
+        window.location.href = "login.html";
     }
 }
 
 // =========================================
 // 4. DUKUNGAN OFFLINE (OFFLINE SUPPORT)
 // =========================================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     // Membuat elemen banner offline
-    const offlineBanner = document.createElement('div');
-    offlineBanner.id = 'globalOfflineBanner';
+    const offlineBanner = document.createElement("div");
+    offlineBanner.id = "globalOfflineBanner";
     offlineBanner.innerHTML = `
         <div style="background-color: #ef4444; color: white; text-align: center; padding: 10px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 500; z-index: 9999; position: fixed; top: 0; left: 0; width: 100%; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); display: flex; justify-content: center; align-items: center; gap: 8px;">
             <span>⚠️</span> Anda sedang offline. Koneksi internet terputus, menggunakan data tersimpan.
         </div>
     `;
-    offlineBanner.style.display = navigator.onLine ? 'none' : 'block';
-    
+    offlineBanner.style.display = navigator.onLine ? "none" : "block";
+
     // Pastikan body memiliki margin-top jika banner muncul agar tidak menutupi header
     if (!navigator.onLine) {
-        document.body.style.paddingTop = '40px';
+        document.body.style.paddingTop = "40px";
     }
 
     document.body.prepend(offlineBanner);
 
     // Event listener ketika internet putus
-    window.addEventListener('offline', () => {
-        const banner = document.getElementById('globalOfflineBanner');
+    window.addEventListener("offline", () => {
+        const banner = document.getElementById("globalOfflineBanner");
         if (banner) {
-            banner.style.display = 'block';
-            document.body.style.paddingTop = '40px'; // Memberi ruang agar UI tidak tertutup
-            
+            banner.style.display = "block";
+            document.body.style.paddingTop = "40px"; // Memberi ruang agar UI tidak tertutup
+
             // Tampilkan notifikasi instan jika sweetalert tersedia
-            if (typeof Swal !== 'undefined') {
+            if (typeof Swal !== "undefined") {
                 Swal.fire({
                     toast: true,
-                    position: 'top-end',
-                    icon: 'warning',
-                    title: 'Koneksi Terputus!',
-                    text: 'Aplikasi beralih ke Mode Offline',
+                    position: "top-end",
+                    icon: "warning",
+                    title: "Koneksi Terputus!",
+                    text: "Aplikasi beralih ke Mode Offline",
                     showConfirmButton: false,
-                    timer: 3000
+                    timer: 3000,
                 });
             }
         }
     });
 
     // Event listener ketika internet kembali terhubung
-    window.addEventListener('online', () => {
-        const banner = document.getElementById('globalOfflineBanner');
+    window.addEventListener("online", () => {
+        const banner = document.getElementById("globalOfflineBanner");
         if (banner) {
-            banner.style.display = 'none';
-            document.body.style.paddingTop = '0';
-            
-            if (typeof Swal !== 'undefined') {
+            banner.style.display = "none";
+            document.body.style.paddingTop = "0";
+
+            if (typeof Swal !== "undefined") {
                 Swal.fire({
                     toast: true,
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Kembali Online',
-                    text: 'Data telah disinkronkan',
+                    position: "top-end",
+                    icon: "success",
+                    title: "Kembali Online",
+                    text: "Data telah disinkronkan",
                     showConfirmButton: false,
-                    timer: 3000
+                    timer: 3000,
                 });
             }
         }
     });
 });
-

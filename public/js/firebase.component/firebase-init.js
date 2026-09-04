@@ -12,9 +12,12 @@
 // =========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-import { getFirestore, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+import {
+    getFirestore,
+    enableIndexedDbPersistence,
+} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
-import { firebaseConfig } from './firebase-env.js';
+import { firebaseConfig } from "./firebase-env.js";
 
 // =========================================
 // 2. KONFIGURASI KREDENSIAL APLIKASI
@@ -31,11 +34,11 @@ export { firebaseConfig };
 // Menjalankan mesin Firebase App memakai data kunci dari firebaseConfig
 const app = initializeApp(firebaseConfig);
 
-// Mengekspor variabel 'auth' (Layanan Autentikasi) yang siap digunakan 
+// Mengekspor variabel 'auth' (Layanan Autentikasi) yang siap digunakan
 // di file JS lain untuk memvalidasi user login atau registrasi
 export const auth = getAuth(app);
 
-// Mengekspor variabel 'db' (Layanan Firestore) 
+// Mengekspor variabel 'db' (Layanan Firestore)
 // untuk dipakai menyimpan data biodata user dll
 export const db = getFirestore(app);
 
@@ -43,9 +46,13 @@ export const db = getFirestore(app);
 // 4. MENGAKTIFKAN DUKUNGAN OFFLINE (INDEXEDDB)
 // =========================================
 enableIndexedDbPersistence(db).catch((err) => {
-    if (err.code == 'failed-precondition') {
-        console.warn("Offline Support: Multiple tabs open, persistence can only be enabled in one tab at a a time.");
-    } else if (err.code == 'unimplemented') {
-        console.warn("Offline Support: The current browser does not support all of the features required to enable persistence.");
+    if (err.code == "failed-precondition") {
+        console.warn(
+            "Offline Support: Multiple tabs open, persistence can only be enabled in one tab at a a time.",
+        );
+    } else if (err.code == "unimplemented") {
+        console.warn(
+            "Offline Support: The current browser does not support all of the features required to enable persistence.",
+        );
     }
 });

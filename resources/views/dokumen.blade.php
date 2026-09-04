@@ -3,10 +3,10 @@
      File: resources/views/dokumen.blade.php
      Deskripsi: Halaman Dokumen
 ========================================================= -->
-@extends('layouts.layout')
+@extends ('layouts.layout')
 
-@section('title', 'Dokumen')
+@section ('title', 'Dokumen')
 
-@section('content')
+@section ('content')
     <!-- Halaman Kosong -->
 @endsection
