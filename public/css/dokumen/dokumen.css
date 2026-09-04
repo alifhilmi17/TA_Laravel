@@ -1,0 +1,1339 @@
+/* =========================================================
+   SISTEM ADMINISTRASI PETERNAKAN (LIBAS)
+   File        : dokumen.css
+   Deskripsi   : Gaya visual khusus halaman Pusat Dokumen & Laporan.
+   Mencakup    : header halaman, kartu ringkasan modul, kartu ekspor,
+                 area ekspor massal, log aktivitas, animasi, responsif.
+========================================================= */
+
+
+/* =========================================================
+   📌 HEADER HALAMAN DOKUMEN
+========================================================= */
+/* Blok paling atas halaman yang memuat judul modul, deskripsi,
+   dan badge tanggal hari ini dengan latar gradien ungu premium */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;            /* Konten turun baris otomatis jika layar sempit */
+    gap: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 18px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 2rem;
+    color: #fff;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+/* =========================================================
+   📌 JUDUL UTAMA HEADER (H1)
+========================================================= */
+/* Teks nama halaman berukuran besar, tebal, dan rapat hurufnya
+   agar menonjol sebagai identitas utama halaman */
+.page-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.5px;
+}
+
+/* =========================================================
+   📌 DESKRIPSI SINGKAT HEADER (PARAGRAF)
+========================================================= */
+/* Teks pendukung di bawah judul header; dibuat sedikit transparan
+   agar tidak bersaing fokus visual dengan judul utama */
+.page-header p {
+    font-size: 0.95rem;
+    opacity: 0.85;
+    margin: 0;
+}
+
+/* =========================================================
+   📅 BADGE TANGGAL HARI INI
+========================================================= */
+/* Kapsul info tanggal yang tampil di pojok kanan atas header;
+   menggunakan teknik glassmorphism (kaca buram) yang elegan */
+.date-badge {
+    background: rgba(255, 255, 255, 0.2);  /* Putih transparan menyatu dengan gradien */
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;                   /* Tanggal tidak boleh patah ke baris berikutnya */
+    backdrop-filter: blur(5px);            /* Efek blur kaca di belakang badge */
+}
+
+
+/* =========================================================
+   📊 GRID KARTU RINGKASAN DATA MODUL
+========================================================= */
+/* Tata letak kisi otomatis yang menampung semua kartu statistik;
+   jumlah kolom menyesuaikan lebar layar secara responsif */
+.doc-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+}
+
+/* =========================================================
+   🃏 BADAN KARTU RINGKASAN PER MODUL
+========================================================= */
+/* Setiap kartu menampilkan ikon + nama modul + jumlah entri;
+   garis aksen kiri berwarna menjadi identitas visual tiap modul */
+.doc-summary-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border-left: 5px solid #667eea;        /* Aksen identitas warna modul (default ungu) */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: default;
+}
+
+/* =========================================================
+   🃏 EFEK HOVER KARTU RINGKASAN
+========================================================= */
+/* Kartu terangkat naik dan bayangan membesar saat kursor melewatinya,
+   menciptakan kesan interaktif yang responsif */
+.doc-summary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================================================
+   🖼️ KOTAK IKON KARTU RINGKASAN
+========================================================= */
+/* Alas persegi membulat berisi emoji ikon besar di sisi kiri kartu;
+   ukurannya tetap tidak menyusut meski teks di sampingnya panjang */
+.doc-summary-icon {
+    font-size: 2rem;
+    background: rgba(102, 126, 234, 0.1);  /* Latar sangat transparan sebagai alas ikon */
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;                         /* Mencegah ikon mengecil akibat teks panjang */
+}
+
+/* =========================================================
+   🏷️ LABEL NAMA MODUL DI KARTU RINGKASAN
+========================================================= */
+/* Teks kecil kapital yang mencantumkan nama modul data (h4),
+   posisinya di atas angka jumlah entri */
+.doc-summary-info h4 {
+    font-size: 0.82rem;
+    color: #888;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+/* =========================================================
+   🔢 ANGKA JUMLAH ENTRI DATA
+========================================================= */
+/* Angka besar yang menampilkan total data tersimpan di modul;
+   dibuat tebal dan gelap agar mudah terbaca sekilas */
+.doc-summary-info p {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+/* =========================================================
+   🎨 WARNA IDENTITAS KARTU DATA PRODUKSI
+========================================================= */
+/* Kuning emas mencerminkan panen dan produksi telur harian */
+#card-produksi {
+    border-left-color: #f59e0b;
+}
+#card-produksi .doc-summary-icon {
+    background: rgba(245, 158, 11, 0.12);
+}
+
+/* =========================================================
+   🎨 WARNA IDENTITAS KARTU STOK PAKAN
+========================================================= */
+/* Hijau segar melambangkan pakan/sayuran sebagai bahan ternak */
+#card-pakan {
+    border-left-color: #10b981;
+}
+#card-pakan .doc-summary-icon {
+    background: rgba(16, 185, 129, 0.12);
+}
+
+/* =========================================================
+   🎨 WARNA IDENTITAS KARTU KEUANGAN
+========================================================= */
+/* Biru langit mewakili kepercayaan dan stabilitas keuangan */
+#card-keuangan {
+    border-left-color: #3b82f6;
+}
+#card-keuangan .doc-summary-icon {
+    background: rgba(59, 130, 246, 0.12);
+}
+
+/* =========================================================
+   🎨 WARNA IDENTITAS KARTU DATA AYAM
+========================================================= */
+/* Merah hangat mencerminkan jengger ayam yang khas */
+#card-ayam {
+    border-left-color: #ef4444;
+}
+#card-ayam .doc-summary-icon {
+    background: rgba(239, 68, 68, 0.12);
+}
+
+/* =========================================================
+   🎨 WARNA IDENTITAS KARTU DATA KESEHATAN
+========================================================= */
+/* Biru teal menyimbolkan dunia medis dan kesehatan ternak */
+#card-kesehatan {
+    border-left-color: #0284c7;
+}
+#card-kesehatan .doc-summary-icon {
+    background: rgba(2, 132, 199, 0.12);
+}
+
+/* =========================================================
+   🎨 WARNA IDENTITAS KARTU VAKSINASI
+========================================================= */
+/* Biru laut tua melambangkan prosedur medis yang serius dan terstruktur */
+#card-vaksinasi {
+    border-left-color: #0369a1;
+}
+#card-vaksinasi .doc-summary-icon {
+    background: rgba(3, 105, 161, 0.12);
+}
+
+/* =========================================================
+   🎨 WARNA IDENTITAS KARTU HISTORI PREDIKSI MA
+========================================================= */
+/* Ungu mewakili kecerdasan, analitik, dan prediksi berbasis data */
+#card-prediksi {
+    border-left-color: #9b59b6;
+}
+#card-prediksi .doc-summary-icon {
+    background: rgba(155, 89, 182, 0.12);
+}
+
+
+/* =========================================================
+   🏷️ JUDUL SECTION (REUSABLE)
+========================================================= */
+/* Teks h2 yang dipakai sebagai pemisah / penanda area konten baru;
+   digunakan berulang di beberapa section pada halaman ini */
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.4rem;
+}
+
+/* =========================================================
+   📝 DESKRIPSI SECTION (REUSABLE)
+========================================================= */
+/* Teks paragraf pendukung di bawah section-title yang menjelaskan
+   fungsi atau isi dari area konten yang akan ditampilkan */
+.section-desc {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 1.5rem;
+}
+
+
+/* =========================================================
+   📤 WRAPPER AREA EKSPOR LAPORAN
+========================================================= */
+/* Pembungkus seluruh section ekspor laporan per modul;
+   memberikan jarak bawah yang memadai sebelum section berikutnya */
+.ekspor-section {
+    margin-bottom: 2.5rem;
+}
+
+/* =========================================================
+   📤 GRID KARTU EKSPOR
+========================================================= */
+/* Kisi dua kolom otomatis yang menampung semua kartu ekspor modul;
+   secara otomatis menjadi satu kolom di layar sempit */
+.ekspor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+/* =========================================================
+   🃏 BADAN KARTU EKSPOR (TIAP MODUL)
+========================================================= */
+/* Setiap kartu berisi header berwarna, deskripsi laporan, area pratinjau
+   data terbaru, dan tombol aksi; ditata vertikal dari atas ke bawah */
+.ekspor-card {
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;               /* Mencegah konten meluber keluar sudut membulat */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;         /* Header > deskripsi > preview > tombol (atas ke bawah) */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* =========================================================
+   🃏 EFEK HOVER KARTU EKSPOR
+========================================================= */
+/* Kartu terangkat dan bayangan membesar saat kursor melewatinya
+   untuk memberikan umpan balik visual yang interaktif */
+.ekspor-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================================================
+   🎨 HEADER ATAS KARTU EKSPOR
+========================================================= */
+/* Pita warna di bagian atas kartu yang memuat ikon dan judul modul;
+   warna gradien berbeda-beda tiap modul sebagai identitas visual */
+.ekspor-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1.2rem 1.5rem;
+    color: #ffffff;
+}
+
+/* =========================================================
+   🎨 TEKS JUDUL DI HEADER KARTU EKSPOR
+========================================================= */
+/* Nama laporan modul yang tampil di dalam pita header berwarna;
+   dibuat tebal namun tidak terlalu besar agar muat di semua layar */
+.ekspor-card-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* =========================================================
+   🖼️ IKON EMOJI DI HEADER KARTU EKSPOR
+========================================================= */
+/* Ukuran emoji representasi modul yang tampil di pita header kartu */
+.ekspor-card-icon {
+    font-size: 1.8rem;
+}
+
+/* =========================================================
+   🎨 GRADIEN HEADER — KARTU PRODUKSI HARIAN
+========================================================= */
+/* Kuning-emas cerah melambangkan panen produksi telur */
+.ekspor-produksi .ekspor-card-header {
+    background: linear-gradient(135deg, #f59e0b 0%, #fcd34d 100%);
+}
+
+/* =========================================================
+   🎨 GRADIEN HEADER — KARTU STOK PAKAN
+========================================================= */
+/* Hijau segar melambangkan ketersediaan pakan ternak yang sehat */
+.ekspor-pakan .ekspor-card-header {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+}
+
+/* =========================================================
+   🎨 GRADIEN HEADER — KARTU KEUANGAN
+========================================================= */
+/* Biru cerah mencerminkan kepercayaan dan pengelolaan keuangan */
+.ekspor-keuangan .ekspor-card-header {
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+}
+
+/* =========================================================
+   🎨 GRADIEN HEADER — KARTU DATA AYAM
+========================================================= */
+/* Merah hangat identik dengan warna jengger dan vitalitas ayam */
+.ekspor-ayam .ekspor-card-header {
+    background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+}
+
+/* =========================================================
+   🎨 GRADIEN HEADER — KARTU KESEHATAN AYAM
+========================================================= */
+/* Biru teal muda merujuk pada warna medis dan perawatan kesehatan */
+.ekspor-kesehatan .ekspor-card-header {
+    background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+}
+
+/* =========================================================
+   🎨 GRADIEN HEADER — KARTU VAKSINASI
+========================================================= */
+/* Biru tua gelap mencerminkan prosedur vaksinasi yang serius */
+.ekspor-vaksinasi .ekspor-card-header {
+    background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+}
+
+/* =========================================================
+   🎨 GRADIEN HEADER — KARTU PREDIKSI MA
+========================================================= */
+/* Ungu mewakili kecerdasan analitik dan prediksi berbasis algoritma */
+.ekspor-prediksi .ekspor-card-header {
+    background: linear-gradient(135deg, #9b59b6 0%, #c39bd3 100%);
+}
+
+/* =========================================================
+   📝 DESKRIPSI ISI LAPORAN DI KARTU EKSPOR
+========================================================= */
+/* Teks pendek yang menjelaskan konten laporan modul kepada pengguna;
+   ditempatkan di antara header dan area pratinjau data */
+.ekspor-card-desc {
+    font-size: 0.85rem;
+    color: #64748b;
+    padding: 1rem 1.5rem 0.5rem;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   👁️ AREA PRATINJAU DATA DI KARTU EKSPOR
+========================================================= */
+/* Kotak ringkasan yang menampilkan 5 entri data terbaru dari modul;
+   dibatasi tinggi maksimal dan bisa di-scroll secara vertikal */
+.ekspor-preview {
+    flex-grow: 1;                           /* Mengisi sisa ruang vertikal agar tombol tetap di bawah */
+    margin: 0.5rem 1.5rem;
+    padding: 0.8rem;
+    background: #f8fafc;                    /* Abu sangat terang membedakan area ini dari latar kartu */
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    max-height: 160px;
+    overflow-y: auto;
+    font-size: 0.82rem;
+    color: #475569;
+}
+
+/* =========================================================
+   🖱️ SCROLLBAR AREA PRATINJAU DATA
+========================================================= */
+/* Lebar jalur scrollbar yang ramping agar tidak memakan ruang */
+.ekspor-preview::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Bagian yang bisa ditarik (thumb) pada scrollbar pratinjau */
+.ekspor-preview::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* =========================================================
+   💬 TEKS KOSONG AREA PRATINJAU
+========================================================= */
+/* Pesan placeholder saat modul belum memiliki data yang tersimpan;
+   tampil miring di tengah area pratinjau */
+.empty-preview {
+    text-align: center;
+    color: #94a3b8;
+    font-style: italic;
+    padding: 1rem 0;
+    margin: 0;
+}
+
+/* =========================================================
+   📋 BARIS DATA PRATINJAU
+========================================================= */
+/* Setiap baris pratinjau memisahkan label (kiri) dan nilai (kanan)
+   dengan garis bawah tipis sebagai pembatas antar entri */
+.preview-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Hapus garis bawah pada baris pratinjau paling terakhir */
+.preview-row:last-child {
+    border-bottom: none;
+}
+
+/* =========================================================
+   🏷️ LABEL KIRI BARIS PRATINJAU
+========================================================= */
+/* Teks tanggal, nama batch, atau keterangan di sisi kiri baris;
+   dibuat lebih kecil dan berwarna abu sebagai teks pendukung */
+.preview-row .preview-label {
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+/* =========================================================
+   🔢 NILAI KANAN BARIS PRATINJAU
+========================================================= */
+/* Angka produksi, nominal laba, atau status di sisi kanan baris;
+   dibuat tebal dan lebih gelap sebagai informasi utama */
+.preview-row .preview-val {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.82rem;
+}
+
+/* =========================================================
+   🔘 AREA TOMBOL AKSI KARTU EKSPOR
+========================================================= */
+/* Baris bawah kartu yang memuat tombol CSV dan Cetak secara sejajar;
+   selalu berada di bagian paling bawah kartu berkat flex-grow preview */
+.ekspor-card-actions {
+    display: flex;
+    gap: 0.8rem;
+    padding: 1rem 1.5rem 1.2rem;
+}
+
+/* =========================================================
+   🔘 TOMBOL EKSPOR (DASAR)
+========================================================= */
+/* Gaya dasar bersama untuk tombol CSV dan Cetak;
+   mengisi lebar merata dalam baris dengan transisi animasi halus */
+.btn-ekspor {
+    flex: 1;                                /* Membagi ruang lebar secara merata dengan tombol lain */
+    padding: 0.65rem 0.5rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* =========================================================
+   📥 TOMBOL EKSPOR CSV
+========================================================= */
+/* Gradien hijau menyimbolkan aksi mengunduh / mengambil data;
+   bayangan hijau di bawah tombol memperkuat identitas aksi ekspor */
+.btn-csv {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(16, 185, 129, 0.25);
+}
+
+/* Efek sedikit membesar saat kursor melewati tombol CSV */
+.btn-csv:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+}
+
+/* =========================================================
+   🖨️ TOMBOL CETAK LAPORAN
+========================================================= */
+/* Gradien biru menyimbolkan dokumen resmi dan aksi mencetak;
+   tampil bersebelahan dengan tombol CSV dalam satu baris */
+.btn-print {
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.25);
+}
+
+/* Efek sedikit membesar saat kursor melewati tombol Cetak */
+.btn-print:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+}
+
+
+/* =========================================================
+   📦 WRAPPER AREA EKSPOR SEMUA LAPORAN SEKALIGUS
+========================================================= */
+/* Pembungkus section yang memuat kartu aksi ekspor semua modul;
+   memberikan jarak bawah sebelum section log aktivitas */
+.ekspor-all-section {
+    margin-bottom: 2.5rem;
+}
+
+/* =========================================================
+   📦 KARTU EKSPOR SEMUA (SATU BARIS LEBAR)
+========================================================= */
+/* Kartu gelap satu baris penuh yang memuat info dan tombol ekspor massal;
+   latar biru-abu tua memberikan kesan premium dan penting */
+.ekspor-all-card {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 18px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;                        /* Tombol turun ke baris berikutnya di layar sempit */
+    box-shadow: 0 8px 25px rgba(30, 41, 59, 0.25);
+    transition: box-shadow 0.3s ease;
+}
+
+/* Bayangan semakin tebal saat kursor melewati kartu ekspor semua */
+.ekspor-all-card:hover {
+    box-shadow: 0 12px 35px rgba(30, 41, 59, 0.35);
+}
+
+/* =========================================================
+   ℹ️ BLOK INFO DI KARTU EKSPOR SEMUA
+========================================================= */
+/* Kontainer ikon + teks judul dan deskripsi di sisi kiri kartu;
+   flex:1 membuatnya mengisi sisa ruang agar tombol tetap di kanan */
+.ekspor-all-info {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    color: #fff;
+    flex: 1;
+}
+
+/* =========================================================
+   🖼️ KOTAK IKON EKSPOR SEMUA
+========================================================= */
+/* Alas persegi ikon besar di sisi kiri blok info;
+   latar putih transparan menyatu elegan dengan latar gelap kartu */
+.ekspor-all-icon {
+    font-size: 2.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    width: 65px;
+    height: 65px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;                         /* Tidak boleh mengecil agar proporsi ikon terjaga */
+}
+
+/* =========================================================
+   📋 JUDUL BLOK INFO EKSPOR SEMUA
+========================================================= */
+/* Teks judul aksi ekspor semua yang tampil tebal di dalam
+   blok info sebelah kiri kartu ekspor massal */
+.ekspor-all-info h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+
+/* =========================================================
+   📝 DESKRIPSI BLOK INFO EKSPOR SEMUA
+========================================================= */
+/* Teks penjelasan singkat di bawah judul blok info;
+   dibuat sedikit transparan sebagai teks pendukung non-utama */
+.ekspor-all-info p {
+    font-size: 0.85rem;
+    opacity: 0.75;
+    margin: 0;
+}
+
+/* =========================================================
+   🔘 GRUP TOMBOL EKSPOR MASSAL
+========================================================= */
+/* Kontainer yang mengelompokkan tiga tombol aksi ekspor massal
+   di sisi kanan kartu; bungkus otomatis jika layar sempit */
+.ekspor-all-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* =========================================================
+   🔘 TOMBOL BESAR EKSPOR MASSAL (DASAR)
+========================================================= */
+/* Gaya dasar bersama seluruh tombol di kartu ekspor massal;
+   kontras kuning-emas di atas latar gelap kartu agar menonjol */
+.btn-ekspor-all {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    color: #1e293b;                         /* Teks gelap kontras emas untuk keterbacaan optimal */
+    border: none;
+    border-radius: 12px;
+    padding: 0.9rem 2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    white-space: nowrap;                    /* Teks tombol tidak boleh terpotong ke baris berikutnya */
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+/* Tombol membesar saat kursor melewatinya */
+.btn-ekspor-all:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.55);
+}
+
+/* Tombol mengecil saat ditekan sebagai umpan balik klik */
+.btn-ekspor-all:active {
+    transform: scale(0.98);
+}
+
+/* =========================================================
+   📥 TOMBOL "EKSPOR CSV TERPISAH"
+========================================================= */
+/* Varian kuning-emas untuk tombol ekspor per modul secara terpisah;
+   warna sama dengan base .btn-ekspor-all (tidak perlu override warna) */
+.btn-all-separate {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    color: #1e293b;
+}
+
+/* =========================================================
+   📋 TOMBOL "UNDUH 1 FILE CSV GABUNGAN"
+========================================================= */
+/* Varian biru untuk tombol yang menggabungkan semua data menjadi
+   satu file CSV tunggal; biru berbeda dengan kuning agar mudah dibedakan */
+.btn-all-merged {
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35);
+}
+
+/* Bayangan biru menguat saat hover tombol gabungan CSV */
+.btn-all-merged:hover {
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+}
+
+/* =========================================================
+   🖨️ TOMBOL "CETAK LAPORAN TERPADU"
+========================================================= */
+/* Varian abu tua untuk tombol cetak semua laporan sekaligus;
+   abu-tua lebih netral dari biru/kuning sehingga hierarki visual terjaga */
+.btn-all-print {
+    background: linear-gradient(135deg, #475569 0%, #64748b 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(71, 85, 105, 0.3);
+}
+
+/* Bayangan abu menguat saat hover tombol cetak terpadu */
+.btn-all-print:hover {
+    box-shadow: 0 8px 25px rgba(71, 85, 105, 0.45);
+}
+
+
+/* =========================================================
+   🕓 WRAPPER SECTION LOG AKTIVITAS EKSPOR
+========================================================= */
+/* Pembungkus section paling bawah halaman yang mencatat riwayat
+   setiap aksi ekspor atau cetak yang dilakukan pada sesi ini */
+.log-section {
+    margin-bottom: 3rem;
+}
+
+/* =========================================================
+   🗂️ KOTAK WADAH DAFTAR LOG
+========================================================= */
+/* Kartu putih yang menampung seluruh daftar log dan tombol hapus;
+   overflow:hidden menjaga tombol hapus masuk ke dalam border radius */
+.log-container {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+/* =========================================================
+   📋 DAFTAR LOG AKTIVITAS
+========================================================= */
+/* Elemen <ul> berisi seluruh baris log aktivitas ekspor;
+   tinggi dibatasi dengan scroll agar halaman tidak terlalu panjang */
+#logList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+/* =========================================================
+   🖱️ SCROLLBAR DAFTAR LOG — JALUR (TRACK)
+========================================================= */
+/* Lebar jalur scrollbar daftar log dibuat tipis agar tidak mengganggu */
+#logList::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* =========================================================
+   🖱️ SCROLLBAR DAFTAR LOG — PEGANGAN (THUMB)
+========================================================= */
+/* Bagian yang ditarik pada scrollbar log; abu muda agar halus dan elegan */
+#logList::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+
+/* =========================================================
+   📌 BARIS ENTRI LOG AKTIVITAS
+========================================================= */
+/* Setiap <li> memuat ikon + teks keterangan + stempel waktu
+   dalam satu baris horizontal; muncul dengan animasi geser dari bawah */
+#logList li {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.9rem 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.88rem;
+    color: #475569;
+    transition: background 0.2s ease;
+    animation: slideIn 0.3s ease-out;      /* Animasi masuk untuk setiap log baru */
+}
+
+/* Latar berubah abu muda saat kursor melewati baris log */
+#logList li:hover {
+    background: #f8fafc;
+}
+
+/* Hilangkan garis bawah pada baris log paling terakhir */
+#logList li:last-child {
+    border-bottom: none;
+}
+
+/* =========================================================
+   💬 TEKS KOSONG DAFTAR LOG
+========================================================= */
+/* Baris khusus yang tampil di tengah daftar saat belum ada
+   aktivitas ekspor yang tercatat dalam sesi ini */
+.log-empty {
+    text-align: center;
+    color: #94a3b8;
+    font-style: italic;
+    padding: 2rem !important;               /* Override padding baris standar untuk baris kosong */
+    justify-content: center !important;
+}
+
+/* =========================================================
+   🖼️ IKON STATUS BARIS LOG
+========================================================= */
+/* Emoji representasi jenis aktivitas (📥 unduh, 🖨️ cetak, dll.)
+   yang tampil di sisi kiri setiap baris log */
+.log-icon {
+    font-size: 1.1rem;
+}
+
+/* =========================================================
+   📝 TEKS KETERANGAN BARIS LOG
+========================================================= */
+/* Isi kalimat aktivitas (nama modul + jumlah data) di tengah baris;
+   flex:1 membuatnya mengisi sisa ruang antara ikon dan waktu */
+.log-text {
+    flex: 1;
+    font-weight: 500;
+    color: #334155;
+}
+
+/* =========================================================
+   🕐 STEMPEL WAKTU BARIS LOG
+========================================================= */
+/* Jam aktivitas ekspor yang tampil kecil di ujung kanan baris;
+   white-space:nowrap mencegah waktu terpotong ke baris berikutnya */
+.log-time {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   🗑️ TOMBOL BERSIHKAN LOG
+========================================================= */
+/* Tombol lebar penuh di bawah daftar log untuk menghapus semua entri;
+   latar abu terang dan garis atas sebagai pemisah dari daftar */
+.btn-clear-log {
+    display: block;
+    width: 100%;
+    padding: 0.8rem;
+    background: #f8fafc;
+    border: none;
+    border-top: 1px solid #e2e8f0;         /* Garis tipis memisahkan daftar dan tombol hapus */
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* =========================================================
+   🗑️ EFEK HOVER TOMBOL BERSIHKAN LOG
+========================================================= */
+/* Warna berubah merah saat kursor melewati tombol hapus;
+   memberi peringatan visual bahwa ini adalah aksi destruktif */
+.btn-clear-log:hover {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+
+/* =========================================================
+   🎬 ANIMASI SLIDE IN (DAPAT DIGUNAKAN ULANG)
+========================================================= */
+/* Keyframe yang menggerakkan elemen dari bawah ke posisi normal
+   disertai perubahan dari transparan menjadi penuh terlihat */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   📱 RESPONSIF — PENYESUAIAN LAYAR KECIL (≤768px)
+========================================================= */
+/* Media query untuk perangkat mobile dan tablet;
+   menyesuaikan tata letak agar tetap nyaman digunakan di layar kecil */
+@media (max-width: 768px) {
+
+    /* =========================================================
+       📌 HEADER — VERSI MOBILE
+    ========================================================= */
+    /* Kurangi padding header agar tidak terlalu sesak di HP */
+    .page-header {
+        padding: 1.5rem;
+    }
+
+    /* Perkecil ukuran judul agar muat di layar sempit */
+    .page-header h1 {
+        font-size: 1.4rem;
+    }
+
+    /* =========================================================
+       📊 GRID RINGKASAN — VERSI MOBILE
+    ========================================================= */
+    /* Paksa dua kolom tetap di HP agar kartu tidak terlalu kecil */
+    .doc-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* =========================================================
+       📦 KARTU EKSPOR SEMUA — VERSI MOBILE
+    ========================================================= */
+    /* Susun vertikal dan rata tengah agar tombol mudah dijangkau */
+    .ekspor-all-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    /* Blok info juga vertikal agar ikon dan teks tidak berhimpitan */
+    .ekspor-all-info {
+        flex-direction: column;
+    }
+
+    /* Tombol ekspor semua melebar penuh layar HP */
+    .btn-ekspor-all {
+        width: 100%;
+    }
+
+    /* =========================================================
+       🔘 GRUP TOMBOL MASSAL — VERSI MOBILE
+    ========================================================= */
+    /* Semua tombol ekspor massal tersusun vertikal dan lebar penuh di HP */
+    .ekspor-all-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   👁️ TOMBOL LIHAT DATA (PREVIEW) DI KARTU EKSPOR
+========================================================= */
+/* Tombol ungu dengan ikon mata yang memicu modal pratinjau data penuh;
+   tampil sebelum tombol CSV dan Cetak di baris aksi kartu */
+.btn-preview {
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(124, 58, 237, 0.28);
+}
+
+/* Efek membesar saat kursor melewati tombol preview */
+.btn-preview:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.42);
+}
+
+
+/* =========================================================
+   🪟 OVERLAY LATAR BELAKANG MODAL PRATINJAU
+========================================================= */
+/* Layer semi-transparan yang menutupi seluruh halaman saat modal terbuka;
+   menggunakan backdrop-filter agar tampilan halaman di belakang menjadi buram */
+.modal-overlay {
+    position: fixed;
+    inset: 0;                                  /* Menutupi seluruh viewport */
+    z-index: 9999;
+    background: rgba(15, 23, 42, 0.65);        /* Latar gelap semi-transparan */
+    backdrop-filter: blur(6px);                /* Efek buram pada konten di belakang */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;                      /* Tidak merespons klik saat tersembunyi */
+    transition: opacity 0.3s ease;
+}
+
+/* State aktif modal: terlihat dan dapat diklik */
+.modal-overlay.aktif {
+    opacity: 1;
+    pointer-events: all;
+}
+
+
+/* =========================================================
+   📦 WADAH UTAMA MODAL
+========================================================= */
+/* Kotak putih yang berisi seluruh konten modal (header, tabel, footer);
+   muncul dengan animasi geser dan perbesar saat overlay aktif */
+.modal-container {
+    background: #fff;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 960px;
+    max-height: 88vh;                          /* Batas tinggi agar modal tidak keluar layar */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transform: scale(0.92) translateY(20px);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Animasi masuk kontainer saat overlay aktif */
+.modal-overlay.aktif .modal-container {
+    transform: scale(1) translateY(0);
+}
+
+
+/* =========================================================
+   🎨 HEADER MODAL PRATINJAU
+========================================================= */
+/* Pita berwarna di bagian atas modal yang memuat ikon, judul laporan,
+   dan tombol tutup; warna gradiennya diubah via JavaScript tiap modul */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.4rem 1.8rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Default; diubah JS */
+    color: #fff;
+    flex-shrink: 0;                            /* Header tidak mengecil meski tabel panjang */
+}
+
+/* Sisi kiri header: ikon besar + judul & subjudul */
+.modal-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Kotak latar ikon di header modal */
+.modal-icon {
+    font-size: 2rem;
+    background: rgba(255, 255, 255, 0.2);
+    width: 55px;
+    height: 55px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Judul nama laporan di header modal */
+.modal-header h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 0.2rem 0;
+}
+
+/* Subjudul/keterangan jumlah entri di header modal */
+.modal-subtitle {
+    font-size: 0.82rem;
+    opacity: 0.8;
+    margin: 0;
+}
+
+/* Tombol ✕ tutup modal di pojok kanan atas */
+.modal-close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: #fff;
+    font-size: 1.1rem;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+}
+
+/* Latar tombol tutup sedikit lebih terang saat di-hover */
+.modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+
+/* =========================================================
+   🔎 TOOLBAR PENCARIAN & JUMLAH ENTRI
+========================================================= */
+/* Bar abu terang di bawah header yang memuat kotak pencarian dan label jumlah;
+   selalu terlihat (sticky) di atas tabel saat konten di-scroll */
+.modal-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 1.8rem;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    flex-shrink: 0;
+}
+
+/* Pembungkus ikon kaca pembesar + input pencarian */
+.modal-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0.45rem 0.9rem;
+    flex: 1;
+    max-width: 380px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Border dan bayangan muncul saat input aktif/fokus */
+.modal-search-wrap:focus-within {
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+/* Ikon kaca pembesar sebagai dekorasi input pencarian */
+.modal-search-icon {
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+/* Kotak input teks pencarian; tidak memiliki gaya bawaan browser */
+.modal-search-input {
+    border: none;
+    outline: none;
+    font-size: 0.88rem;
+    color: #334155;
+    background: transparent;
+    width: 100%;
+    font-family: inherit;
+}
+
+/* Label jumlah baris yang cocok dengan filter / total entri */
+.modal-row-count {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #64748b;
+    white-space: nowrap;
+    background: #e2e8f0;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+}
+
+
+/* =========================================================
+   📋 AREA KONTEN SCROLLABLE MODAL (TABEL)
+========================================================= */
+/* Area tengah modal yang berisi tabel data; dapat di-scroll secara vertikal
+   sehingga modal tidak meluber keluar layar untuk data yang panjang */
+.modal-body {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Pembungkus tabel dengan scroll vertikal dan horizontal */
+.modal-table-wrap {
+    overflow: auto;
+    flex: 1;
+    padding: 0 0.5rem;
+}
+
+/* Scrollbar ramping untuk area tabel modal */
+.modal-table-wrap::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.modal-table-wrap::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* Tabel data melebar penuh, sel rapat tanpa jarak antar border */
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+}
+
+/* Cell header tabel: latar abu sangat terang, teks kecil kapital */
+.modal-table thead th {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 2px solid #e2e8f0;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;                                    /* Header tabel "menempel" saat scroll vertikal */
+    z-index: 1;
+}
+
+/* Cell data tabel: padding nyaman dan garis bawah abu tipis */
+.modal-table tbody td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    vertical-align: middle;
+}
+
+/* Latar abu sangat muda pada baris genap (striped effect) */
+.modal-table tbody tr:nth-child(even) td {
+    background: #fafbfc;
+}
+
+/* Latar ungu muda saat kursor melewati baris tabel */
+.modal-table tbody tr:hover td {
+    background: #f5f3ff;
+}
+
+/* Badge berwarna untuk nilai status di dalam tabel */
+.modal-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Pesan ketika tidak ada baris data yang cocok dengan pencarian */
+.modal-empty {
+    text-align: center;
+    color: #94a3b8;
+    font-style: italic;
+    padding: 3rem 1rem;
+    margin: 0;
+}
+
+
+/* =========================================================
+   🔘 FOOTER MODAL (TOMBOL AKSI)
+========================================================= */
+/* Baris tombol di bagian paling bawah modal; selalu terlihat
+   dan tidak ikut ter-scroll bersama konten tabel */
+.modal-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.8rem;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+/* Gaya dasar bersama semua tombol di footer modal */
+.modal-footer button {
+    padding: 0.6rem 1.4rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    font-family: inherit;
+}
+
+/* Tombol Ekspor CSV di footer modal: gradien hijau */
+.modal-btn-csv {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(16, 185, 129, 0.25);
+}
+.modal-btn-csv:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+}
+
+/* Tombol Cetak di footer modal: gradien biru */
+.modal-btn-print {
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.25);
+}
+.modal-btn-print:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+}
+
+/* Tombol Tutup di footer modal: abu netral */
+.modal-btn-close {
+    background: #e2e8f0;
+    color: #475569;
+    margin-left: auto;                         /* Dorong ke ujung kanan footer */
+}
+.modal-btn-close:hover {
+    background: #cbd5e1;
+    color: #1e293b;
+}
+
+
+/* =========================================================
+   📱 RESPONSIF MODAL — LAYAR KECIL (≤640px)
+========================================================= */
+@media (max-width: 640px) {
+    /* Modal memenuhi layar HP tanpa padding luar */
+    .modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    /* Kontainer modal memanjang ke bawah seperti bottom-sheet */
+    .modal-container {
+        border-radius: 20px 20px 0 0;
+        max-height: 92vh;
+    }
+
+    /* Toolbar pencarian tersusun vertikal di HP */
+    .modal-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+    }
+
+    /* Kotak pencarian melebar penuh */
+    .modal-search-wrap {
+        max-width: 100%;
+    }
+
+    /* Tombol footer tersusun vertikal lebar penuh */
+    .modal-footer {
+        flex-direction: column;
+    }
+    .modal-footer button {
+        width: 100%;
+    }
+    .modal-btn-close {
+        margin-left: 0;
+    }
+}
